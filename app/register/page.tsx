@@ -3,6 +3,7 @@
 import { useState, useEffect, FormEvent } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
+import { EASING, DURATION } from '@/lib/animations'
 import { ArrowLeft, Check, ChevronRight, User, Users, Baby, HelpCircle, Loader2, Edit3 } from 'lucide-react'
 
 // --- TYPES & INITIAL STATE ---
@@ -232,10 +233,10 @@ export default function RegisterPage() {
   }
 
   const pageTransition = {
-    initial: { opacity: 0, y: 15 },
+    initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: -15 },
-    transition: { duration: 0.4, ease: "easeOut" }
+    transition: { duration: DURATION.medium, ease: EASING.standard }
   }
 
   // --- SUB-COMPONENTS ---
@@ -640,10 +641,13 @@ export default function RegisterPage() {
 
           {/* STEP: SUCCESS */}
           {step === 'success' && (
-            <motion.div key="success" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }} className="flex flex-col items-center text-center py-12">
-              <div className="mb-8 flex size-20 items-center justify-center rounded-full bg-[#e6eee5] text-[#577565]">
+            <motion.div key="success" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: DURATION.large, ease: EASING.expressive }} className="flex flex-col items-center text-center py-12">
+              <motion.div 
+                initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: "spring", stiffness: 200, damping: 15 }}
+                className="mb-8 flex size-20 items-center justify-center rounded-full bg-[#e6eee5] text-[#577565]"
+              >
                 <Check className="size-10" />
-              </div>
+              </motion.div>
               <h1 className="font-serif text-5xl leading-tight tracking-[-.05em] md:text-6xl">You&apos;re on Your Way <br />to Learning Yorùbá! <span className="font-sans">🌿</span></h1>
               <p className="mx-auto mt-6 max-w-[500px] text-lg text-[#19352b]/70">Thank you for registering with LearnYorubaEasily, {data.firstName}. We&apos;ve received your information and will guide you through the next step.</p>
               

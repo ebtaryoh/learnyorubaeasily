@@ -4,7 +4,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowUpRight, Check, Sparkles } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { fadeUpVariants, staggerContainer } from '@/lib/animations'
+import { fadeUpVariants, staggerContainer, cardHoverVariants, imageZoomVariants, revealMaskVariants } from '@/lib/animations'
+import { AnimatedCounter } from '@/components/motion/AnimatedCounter'
+import { YorubaPhrase } from '@/components/motion/YorubaPhrase'
+import { VocabularyMarquee } from '@/components/motion/VocabularyMarquee'
+import { ProverbCard } from '@/components/motion/ProverbCard'
+import { ParallaxImage } from '@/components/motion/ParallaxImage'
 
 export default function HomePage() {
   return (
@@ -22,19 +27,21 @@ export default function HomePage() {
           <motion.div className="absolute -bottom-9 -right-8 z-20 flex size-28 rotate-6 flex-col items-center justify-center rounded-full bg-[#FDE047] text-center text-xs font-semibold text-[#19352b] shadow-xl" animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}>
             <Sparkles className="mb-1 size-4" /> Learn<br />together
           </motion.div>
-          <div className="relative aspect-[.82] overflow-hidden rounded-[180px_180px_18px_18px] shadow-2xl"><Image src="/yoruba-learning-hero.png" alt="Mother and daughter learning Yorùbá together" fill priority className="object-cover" /></div>
-          <motion.div className="absolute -bottom-6 -left-6 hidden max-w-[190px] rounded-2xl bg-[#19352b] p-5 text-[#f8f6f0] shadow-xl sm:block" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.8, duration: 0.8 }}>
-            <p className="font-serif text-2xl">“Ẹ káàbọ̀”</p><p className="mt-1 text-xs text-[#f8f6f0]/60">Welcome to your journey</p>
-          </motion.div>
+          <ParallaxImage src="/yoruba-learning-hero.png" alt="Mother and daughter learning Yorùbá together" priority className="relative aspect-[.82] rounded-[180px_180px_18px_18px] shadow-2xl" />
+          <div className="absolute -bottom-6 -left-6 hidden max-w-[220px] rounded-2xl bg-[#19352b] p-6 text-[#f8f6f0] shadow-xl sm:block">
+            <YorubaPhrase yoruba="Ẹ káàbọ̀" english="Welcome to your journey" />
+          </div>
         </motion.div>
       </section>
 
-      <section className="border-t border-[#19352b]/10 bg-white">
+      <VocabularyMarquee />
+
+      <section className="bg-white">
         <div className="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-8 px-5 py-8 lg:px-8">
-          <div className="flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-full bg-[#e6eee5] text-xl">🌍</div><div className="text-sm"><p className="font-semibold text-[#19352b]">15+ Countries</p><p className="text-[#19352b]/60">Global Community</p></div></div>
-          <div className="flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-full bg-[#f2e5d8] text-xl">👨‍🎓</div><div className="text-sm"><p className="font-semibold text-[#19352b]">500+ Active Learners</p><p className="text-[#19352b]/60">Growing daily</p></div></div>
-          <div className="flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-full bg-[#e9e5ef] text-xl">⭐</div><div className="text-sm"><p className="font-semibold text-[#19352b]">4.9/5 Average Rating</p><p className="text-[#19352b]/60">From our students</p></div></div>
-          <div className="flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-full bg-[#f8f6f0] border border-[#19352b]/10 text-xl">🏅</div><div className="text-sm"><p className="font-semibold text-[#19352b]">Expert Tutors</p><p className="text-[#19352b]/60">Native speakers</p></div></div>
+          <div className="flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-full bg-[#e6eee5] text-xl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="size-5 text-[#19352b]"><path d="M6 4c4 4 4 12 0 16h12c-4-4-4-12 0-16z" /><path d="M7 6l10 2 M7 10l10 0 M7 14l10-2" opacity="0.4" /></svg></div><div className="text-sm"><p className="font-semibold text-[#19352b]"><AnimatedCounter value={15} suffix="+" /> Countries</p><p className="text-[#19352b]/60">Global Community</p></div></div>
+          <div className="flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-full bg-[#f2e5d8] text-xl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="size-5 text-[#19352b]"><path d="M4 10c0 6.6 4 10 8 10s8-3.4 8-10" /><path d="M3 10h18" /><path d="M12 4v2" /><path d="M8 6c0-2 8-2 8 0" /></svg></div><div className="text-sm"><p className="font-semibold text-[#19352b]"><AnimatedCounter value={500} suffix="+" /> Active Learners</p><p className="text-[#19352b]/60">Growing daily</p></div></div>
+          <div className="flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-full bg-[#e9e5ef] text-xl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="size-5 text-[#19352b]"><path d="M12 2v20M2 12h20M4.9 4.9l14.2 14.2M4.9 19.1l14.2-14.2" opacity="0.3"/><circle cx="12" cy="12" r="4" fill="currentColor" /></svg></div><div className="text-sm"><p className="font-semibold text-[#19352b]">4.9/5 Average Rating</p><p className="text-[#19352b]/60">From our students</p></div></div>
+          <div className="flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-full bg-[#f8f6f0] border border-[#19352b]/10 text-xl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="size-5 text-[#19352b]"><path d="M12 2C8 2 6 7 6 12s2 10 6 10 6-5 6-10S16 2 12 2z" /><path d="M12 4v16" opacity="0.4" /><path d="M10 8h4 M10 12h4 M10 16h4" opacity="0.4" /></svg></div><div className="text-sm"><p className="font-semibold text-[#19352b]">Expert Tutors</p><p className="text-[#19352b]/60">Native speakers</p></div></div>
         </div>
       </section>
 
@@ -70,21 +77,21 @@ export default function HomePage() {
               { t: 'Children’s Curriculum', d: 'Engaging lessons designed to make learning enjoyable for younger minds.', img: '/child-learning.jpg', c: 'bg-[#f2e5d8]' },
               { t: 'Private Lessons', d: 'Personalized one-on-one instruction shaped exactly around your goals.', img: '/online-class-woman.jpg', c: 'bg-[#e9e5ef]' }
             ].map((p, i) => (
-              <motion.div key={i} variants={fadeUpVariants} className={`rounded-3xl ${p.c} flex flex-col overflow-hidden`}>
-                <motion.div 
-                  className="relative h-48 w-full"
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ repeat: Infinity, duration: 4 + i * 0.5, ease: "easeInOut" }}
-                >
-                  <Image src={p.img} alt={p.t} fill className="object-cover" />
-                </motion.div>
-                <div className="p-8 flex flex-col justify-between flex-1">
-                  <div>
-                    <h3 className="font-serif text-2xl mb-3">{p.t}</h3>
-                    <p className="text-[#19352b]/70 text-sm leading-relaxed max-w-[250px]">{p.d}</p>
+              <motion.div key={i} variants={fadeUpVariants} className="h-full">
+                <motion.div variants={cardHoverVariants} initial="rest" whileHover="hover" className={`rounded-3xl ${p.c} flex flex-col overflow-hidden h-full cursor-pointer`}>
+                  <div className="relative h-48 w-full overflow-hidden">
+                    <motion.div variants={imageZoomVariants} className="h-full w-full relative">
+                      <Image src={p.img} alt={p.t} fill className="object-cover" />
+                    </motion.div>
                   </div>
-                  <Link href="/register" className="mt-8 inline-flex items-center text-sm font-semibold">Enroll now <ArrowUpRight className="ml-2 size-4" /></Link>
-                </div>
+                  <div className="p-8 flex flex-col justify-between flex-1">
+                    <div>
+                      <h3 className="font-serif text-2xl mb-3">{p.t}</h3>
+                      <p className="text-[#19352b]/70 text-sm leading-relaxed max-w-[250px]">{p.d}</p>
+                    </div>
+                    <Link href="/register" className="mt-8 inline-flex items-center text-sm font-semibold transition-colors hover:text-[#EAB308]">Enroll now <ArrowUpRight className="ml-2 size-4" /></Link>
+                  </div>
+                </motion.div>
               </motion.div>
             ))}
           </div>
@@ -104,17 +111,18 @@ export default function HomePage() {
         </motion.div>
       </section>
 
+      <ProverbCard />
+
       {/* Meet the Instructors */}
-      <section className="px-5 py-24 bg-[#f8f6f0] lg:px-8 border-t border-[#19352b]/10">
+      <section className="px-5 py-24 bg-[#f8f6f0] lg:px-8">
         <motion.div className="mx-auto max-w-[1240px]" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer}>
           <div className="grid gap-12 lg:grid-cols-2 items-center">
-            <motion.div 
-              variants={fadeUpVariants} 
-              className="relative aspect-square md:aspect-[4/3] lg:aspect-square overflow-hidden rounded-3xl border border-[#19352b]/5 shadow-xl"
-              animate={{ y: [0, -15, 0] }}
-              transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-            >
-              <Image src="/cultural-immersion.jpg" alt="Student taking notes in Yorùbá class" fill className="object-cover" />
+            <motion.div variants={fadeUpVariants}>
+              <ParallaxImage 
+                src="/cultural-immersion.jpg" 
+                alt="Student taking notes in Yorùbá class" 
+                className="aspect-square md:aspect-[4/3] lg:aspect-square rounded-3xl border border-[#19352b]/5 shadow-xl" 
+              />
             </motion.div>
             <motion.div variants={fadeUpVariants} className="max-w-[500px]">
               <p className="eyebrow">Our Methodology</p>
