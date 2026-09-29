@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 
 export default function Loading() {
   return (
@@ -17,8 +18,7 @@ export default function Loading() {
         className="flex flex-col items-center justify-center gap-6"
       >
         <div className="flex items-center gap-3">
-          <span className="flex size-9 items-center justify-center rounded-full bg-[#19352b] text-sm font-semibold text-[#f8f6f0]">LY</span>
-          <span className="font-serif text-[19px] tracking-[-0.03em]">LearnYoruba<span className="text-[#bd674b]">Easily</span></span>
+          <Image src="/logo.jpg" alt="Loading LearnYorubaEasily" width={150} height={150} className="h-10 w-auto object-contain opacity-50 grayscale" />
         </div>
         <div className="relative flex size-12 items-center justify-center rounded-full border-4 border-[#19352b]/10">
           <motion.div 

@@ -22,7 +22,9 @@ export default function HomePage() {
           <motion.div className="absolute -bottom-9 -right-8 z-20 flex size-28 rotate-6 flex-col items-center justify-center rounded-full bg-[#d8ad7b] text-center text-xs font-semibold text-[#19352b] shadow-xl" animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}>
             <Sparkles className="mb-1 size-4" /> Learn<br />together
           </motion.div>
-          <div className="relative aspect-[.82] overflow-hidden rounded-[180px_180px_18px_18px] shadow-2xl"><Image src="/yoruba-learning-hero.png" alt="Mother and daughter learning Yorùbá together" fill priority className="object-cover" /></div>
+          <div className="relative aspect-square overflow-hidden rounded-[2rem] shadow-2xl bg-white flex items-center justify-center">
+            <Image src="/logo.jpg" alt="Learn Yoruba Easily Logo" fill priority className="object-contain p-8" />
+          </div>
           <motion.div className="absolute -bottom-6 -left-6 hidden max-w-[190px] rounded-2xl bg-[#19352b] p-5 text-[#f8f6f0] shadow-xl sm:block" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.8, duration: 0.8 }}>
             <p className="font-serif text-2xl">“Ẹ káàbọ̀”</p><p className="mt-1 text-xs text-[#f8f6f0]/60">Welcome to your journey</p>
           </motion.div>

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState } from 'react'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { usePathname } from 'next/navigation'
@@ -21,8 +22,7 @@ export function Header() {
     <header className="fixed inset-x-0 top-0 z-50 border-b border-[#19352b]/10 bg-[#f8f6f0]/90 backdrop-blur-md">
       <div className="mx-auto flex h-[76px] max-w-[1240px] items-center justify-between px-5 lg:px-8">
         <Link href="/" className="group flex items-center gap-3" aria-label="LearnYorubaEasily home">
-          <span className="flex size-9 items-center justify-center rounded-full bg-[#19352b] text-sm font-semibold text-[#f8f6f0]">LY</span>
-          <span className="font-serif text-[19px] tracking-[-0.03em]">LearnYoruba<span className="text-[#bd674b]">Easily</span></span>
+          <Image src="/logo.jpg" alt="LearnYorubaEasily Logo" width={180} height={180} className="h-12 w-auto object-contain" priority />
         </Link>
         
         <nav className="hidden items-center gap-8 text-sm font-medium lg:flex" aria-label="Main navigation">
