@@ -4,13 +4,20 @@ import './globals.css'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 export const metadata: Metadata = {
+  metadataBase: new URL('https://learnyorubaeasily.com'), // Replace with your actual domain when you have one
   title: 'LearnYorubaEasily — Learn Yorùbá with confidence',
-  description: 'Practical, engaging Yorùbá classes for adults, children, families, and learners around the world.',
-  generator: 'v0.app',
+  description: 'Practical, engaging Yorùbá classes for adults, children, families, and learners around the world. Reconnect with your heritage.',
+  keywords: ['Yoruba', 'learn Yoruba', 'Yoruba language', 'Yoruba classes online', 'speak Yoruba', 'Yoruba for kids', 'Yoruba tutor'],
   openGraph: {
     title: 'LearnYorubaEasily — Learn Yorùbá with confidence',
-    description: 'Learn Yorùbá. Speak it. Live it.',
+    description: 'Practical, engaging Yorùbá classes for adults, children, families, and learners around the world.',
     type: 'website',
+    siteName: 'LearnYorubaEasily',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'LearnYorubaEasily — Learn Yorùbá with confidence',
+    description: 'Practical, engaging Yorùbá classes for adults, children, families, and learners around the world.',
   },
   icons: {
     icon: [

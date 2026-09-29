@@ -132,6 +132,7 @@ export default function RegisterPage() {
     if (!data.firstName.trim()) newErrors.firstName = 'First name is required.'
     if (!data.lastName.trim()) newErrors.lastName = 'Last name is required.'
     if (!data.email.trim() || !/^\S+@\S+\.\S+$/.test(data.email)) newErrors.email = 'Please enter a valid email address.'
+    if (!data.phone.trim()) newErrors.phone = 'WhatsApp number is required.'
     if (!data.registerType) newErrors.registerType = 'Please select who you are registering.'
     
     if (data.registerType === 'My child') {
@@ -177,21 +178,57 @@ export default function RegisterPage() {
     setIsSubmitting(true)
     setSubmitError('')
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false)
-      // 5% chance of fake failure for robustness testing
-      if (Math.random() > 0.95) {
-        setSubmitError('Something went wrong while submitting your registration. Your information has not been lost. Please try again.')
+    try {
+      const SCRIPT_URL = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbyVlNMvIlkWpBcQCXne0TE6fvZ6Oi8FNs0ftYfJfj6x-pdLyCC6vvF2lITDLSop1kcn/exec'
+      
+      if (!SCRIPT_URL) {
+        // If URL isn't set, simulate success for testing
+        setTimeout(() => {
+          setIsSubmitting(false)
+          setRefNumber(`LYE-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`)
+          setStep('success')
+          localStorage.removeItem(STORAGE_KEY)
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        }, 1500)
         return
       }
+
+      // Convert our data object into a format Google Sheets likes
+      const searchParams = new URLSearchParams()
+      Object.entries(data).forEach(([key, value]) => {
+        // Flatten arrays (like programs or goals) into comma-separated strings
+        if (Array.isArray(value)) {
+          searchParams.append(key, value.join(', '))
+        } else {
+          searchParams.append(key, String(value))
+        }
+      })
       
-      const fakeRef = `LYE-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`
-      setRefNumber(fakeRef)
+      // Add a timestamp
+      searchParams.append('timestamp', new Date().toISOString())
+
+      // Send the data
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: searchParams,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        mode: 'no-cors' // Required for Google Apps Script
+      })
+
+      // Since no-cors hides the response, we assume success if it didn't throw a network error
+      setIsSubmitting(false)
+      setRefNumber(`LYE-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`)
       setStep('success')
       localStorage.removeItem(STORAGE_KEY)
       window.scrollTo({ top: 0, behavior: 'smooth' })
-    }, 1500)
+      
+    } catch (error) {
+      console.error('Submission error:', error)
+      setIsSubmitting(false)
+      setSubmitError('Something went wrong while submitting your registration. Please try again or contact us directly.')
+    }
   }
 
   const pageTransition = {
@@ -249,13 +286,10 @@ export default function RegisterPage() {
               <h1 className="font-serif text-5xl leading-tight tracking-[-.05em] md:text-6xl">Start Your Yorùbá <br /><em className="text-[#bd674b]">Learning Journey.</em></h1>
               <p className="mx-auto mt-6 max-w-[500px] text-lg text-[#19352b]/70">Tell us a little about yourself and what you&apos;d like to achieve. We&apos;ll use your answers to help create the right learning experience for you.</p>
               
-              <div className="mx-auto mt-12 flex flex-col gap-4 sm:flex-row">
+              <div className="mx-auto mt-12 flex flex-col gap-4 sm:flex-row justify-center">
                 <button onClick={() => handleNext('intro')} className="inline-flex items-center justify-center rounded-full bg-[#19352b] px-8 py-4 font-semibold text-white transition-transform hover:-translate-y-1">
                   Begin Registration <ChevronRight className="ml-2 size-5" />
                 </button>
-                <Link href="#" className="inline-flex items-center justify-center rounded-full border border-[#19352b]/20 px-8 py-4 font-semibold text-[#19352b] transition-colors hover:bg-white">
-                  Already have an account? Sign in
-                </Link>
               </div>
             </motion.div>
           )}
@@ -288,8 +322,9 @@ export default function RegisterPage() {
                     {errors.email && <p className="text-xs text-red-500">{errors.email}</p>}
                   </div>
                   <div className="space-y-2">
-                    <label htmlFor="phone" className="text-sm font-medium">Phone / WhatsApp</label>
-                    <input id="phone" value={data.phone} onChange={e => handleUpdate('phone', e.target.value)} type="tel" placeholder="+1 (555) 000-0000" className="w-full rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#bd674b]" />
+                    <label htmlFor="phone" className="text-sm font-medium">WhatsApp Number *</label>
+                    <input id="phone" value={data.phone} onChange={e => handleUpdate('phone', e.target.value)} type="tel" placeholder="+1 (555) 000-0000" className={`w-full rounded-xl border bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#bd674b] ${errors.phone ? 'border-red-400' : 'border-[#19352b]/10'}`} />
+                    {errors.phone && <p className="text-xs text-red-500">{errors.phone}</p>}
                   </div>
                 </div>
 
@@ -578,7 +613,7 @@ export default function RegisterPage() {
                       {data.termsAgreed && <Check className="size-3.5" />}
                     </div>
                     <input type="checkbox" className="sr-only" checked={data.termsAgreed} onChange={(e) => handleUpdate('termsAgreed', e.target.checked)} />
-                    <span className="text-sm">I agree to the LearnYorubaEasily <Link href="#" className="underline hover:text-[#bd674b]">Terms of Service</Link> and <Link href="#" className="underline hover:text-[#bd674b]">Privacy Policy</Link>. *</span>
+                    <span className="text-sm">I agree to the LearnYorubaEasily <Link href="/terms" target="_blank" className="underline hover:text-[#bd674b]">Terms of Service</Link> and <Link href="/privacy" target="_blank" className="underline hover:text-[#bd674b]">Privacy Policy</Link>. *</span>
                   </label>
                   {errors.termsAgreed && <p className="mt-2 ml-9 text-xs text-red-500">{errors.termsAgreed}</p>}
                   
@@ -621,18 +656,15 @@ export default function RegisterPage() {
                   <h3 className="font-semibold text-lg">What&apos;s Next?</h3>
                   <ul className="mt-4 space-y-3 text-sm text-[#19352b]/70">
                     <li className="flex items-start gap-3"><div className="mt-1 size-1.5 shrink-0 rounded-full bg-[#bd674b]" /> We will review your registration and selected programs.</li>
-                    <li className="flex items-start gap-3"><div className="mt-1 size-1.5 shrink-0 rounded-full bg-[#bd674b]" /> You will receive a welcome email with your next-step information and enrollment options.</li>
+                    <li className="flex items-start gap-3"><div className="mt-1 size-1.5 shrink-0 rounded-full bg-[#bd674b]" /> We will message you directly on WhatsApp to provide your Zoom link and class materials.</li>
                     <li className="flex items-start gap-3"><div className="mt-1 size-1.5 shrink-0 rounded-full bg-[#bd674b]" /> You will be ready to begin your Yorùbá learning journey!</li>
                   </ul>
                 </div>
               </div>
               
-              <div className="mt-12 flex flex-col gap-4 sm:flex-row w-full sm:w-auto">
+              <div className="mt-12 flex flex-col gap-4 sm:flex-row w-full sm:w-auto justify-center">
                 <Link href="/" className="inline-flex items-center justify-center rounded-full bg-[#19352b] px-8 py-4 font-semibold text-white transition-transform hover:-translate-y-1">
-                  Go to My Dashboard
-                </Link>
-                <Link href="/" className="inline-flex items-center justify-center rounded-full border border-[#19352b]/20 px-8 py-4 font-semibold text-[#19352b] transition-colors hover:bg-white">
-                  Back to LearnYorubaEasily
+                  Back to Homepage
                 </Link>
               </div>
             </motion.div>
