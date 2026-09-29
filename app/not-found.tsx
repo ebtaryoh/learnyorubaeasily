@@ -21,7 +21,7 @@ export default function NotFound() {
           404
         </h1>
         
-        <h2 className="mt-4 font-serif text-2xl text-[#bd674b]">
+        <h2 className="mt-4 font-serif text-2xl text-[#EAB308]">
           Àkíyèsí! (Notice!)
         </h2>
         

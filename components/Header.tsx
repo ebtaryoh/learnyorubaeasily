@@ -30,7 +30,7 @@ export function Header() {
             <Link 
               key={item.name} 
               href={item.href} 
-              className={`transition-colors hover:text-[#bd674b] ${pathname === item.href ? 'text-[#bd674b]' : ''}`}
+              className={`transition-colors hover:text-[#EAB308] ${pathname === item.href ? 'text-[#EAB308]' : ''}`}
             >
               {item.name}
             </Link>
@@ -52,7 +52,7 @@ export function Header() {
               key={item.name} 
               href={item.href} 
               onClick={() => setMobileOpen(false)} 
-              className={`text-lg ${pathname === item.href ? 'text-[#bd674b] font-medium' : ''}`}
+              className={`text-lg ${pathname === item.href ? 'text-[#EAB308] font-medium' : ''}`}
             >
               {item.name}
             </Link>

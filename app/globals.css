@@ -15,11 +15,11 @@
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body { margin: 0; background: #f8f6f0; font-family: var(--font-sans); }
-  ::selection { background: #d8ad7b; color: #19352b; }
+  ::selection { background: #FDE047; color: #19352b; }
 }
 
 @layer components {
-  .eyebrow { @apply text-xs font-semibold uppercase tracking-[0.2em] text-[#bd674b]; }
+  .eyebrow { @apply text-xs font-semibold uppercase tracking-[0.2em] text-[#EAB308]; }
 }
 
 @media (prefers-reduced-motion: reduce) {

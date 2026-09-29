@@ -249,12 +249,12 @@ export default function RegisterPage() {
         {steps.map((s, i) => (
           <div key={s} className="flex items-center">
             <div className={`flex size-8 items-center justify-center rounded-full text-xs font-bold transition-colors ${
-              i <= currentIndex ? 'bg-[#bd674b] text-white' : 'bg-[#19352b]/10 text-[#19352b]/50'
+              i <= currentIndex ? 'bg-[#EAB308] text-white' : 'bg-[#19352b]/10 text-[#19352b]/50'
             }`}>
               {i < currentIndex ? <Check className="size-4" /> : i + 1}
             </div>
             {i < steps.length - 1 && (
-              <div className={`h-1 w-10 sm:w-16 transition-colors ${i < currentIndex ? 'bg-[#bd674b]' : 'bg-[#19352b]/10'}`} />
+              <div className={`h-1 w-10 sm:w-16 transition-colors ${i < currentIndex ? 'bg-[#EAB308]' : 'bg-[#19352b]/10'}`} />
             )}
           </div>
         ))}
@@ -269,7 +269,7 @@ export default function RegisterPage() {
         <div className="mx-auto flex h-[76px] max-w-[800px] items-center justify-between px-5">
           <Link href="/" className="flex items-center gap-2" aria-label="Back to home">
             <span className="flex size-8 items-center justify-center rounded-full bg-[#19352b] text-xs font-semibold text-[#f8f6f0]">LY</span>
-            <span className="hidden font-serif text-[17px] tracking-[-0.03em] sm:block">LearnYoruba<span className="text-[#bd674b]">Easily</span></span>
+            <span className="hidden font-serif text-[17px] tracking-[-0.03em] sm:block">LearnYoruba<span className="text-[#EAB308]">Easily</span></span>
           </Link>
           {step !== 'success' && step !== 'intro' && (
             <button onClick={() => setStep('intro')} className="text-sm font-medium text-[#19352b]/60 hover:text-[#19352b]">Save & Exit</button>
@@ -283,7 +283,7 @@ export default function RegisterPage() {
           {/* STEP: INTRO */}
           {step === 'intro' && (
             <motion.div key="intro" {...pageTransition} className="flex min-h-[60vh] flex-col justify-center text-center">
-              <h1 className="font-serif text-5xl leading-tight tracking-[-.05em] md:text-6xl">Start Your Yorùbá <br /><em className="text-[#bd674b]">Learning Journey.</em></h1>
+              <h1 className="font-serif text-5xl leading-tight tracking-[-.05em] md:text-6xl">Start Your Yorùbá <br /><em className="text-[#EAB308]">Learning Journey.</em></h1>
               <p className="mx-auto mt-6 max-w-[500px] text-lg text-[#19352b]/70">Tell us a little about yourself and what you&apos;d like to achieve. We&apos;ll use your answers to help create the right learning experience for you.</p>
               
               <div className="mx-auto mt-12 flex flex-col gap-4 sm:flex-row justify-center">
@@ -305,12 +305,12 @@ export default function RegisterPage() {
                 <div className="grid gap-6 sm:grid-cols-2">
                   <div className="space-y-2">
                     <label htmlFor="firstName" className="text-sm font-medium">First Name *</label>
-                    <input id="firstName" value={data.firstName} onChange={e => handleUpdate('firstName', e.target.value)} type="text" className={`w-full rounded-xl border bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#bd674b] ${errors.firstName ? 'border-red-400' : 'border-[#19352b]/10'}`} />
+                    <input id="firstName" value={data.firstName} onChange={e => handleUpdate('firstName', e.target.value)} type="text" className={`w-full rounded-xl border bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308] ${errors.firstName ? 'border-red-400' : 'border-[#19352b]/10'}`} />
                     {errors.firstName && <p className="text-xs text-red-500">{errors.firstName}</p>}
                   </div>
                   <div className="space-y-2">
                     <label htmlFor="lastName" className="text-sm font-medium">Last Name *</label>
-                    <input id="lastName" value={data.lastName} onChange={e => handleUpdate('lastName', e.target.value)} type="text" className={`w-full rounded-xl border bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#bd674b] ${errors.lastName ? 'border-red-400' : 'border-[#19352b]/10'}`} />
+                    <input id="lastName" value={data.lastName} onChange={e => handleUpdate('lastName', e.target.value)} type="text" className={`w-full rounded-xl border bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308] ${errors.lastName ? 'border-red-400' : 'border-[#19352b]/10'}`} />
                     {errors.lastName && <p className="text-xs text-red-500">{errors.lastName}</p>}
                   </div>
                 </div>
@@ -318,19 +318,19 @@ export default function RegisterPage() {
                 <div className="grid gap-6 sm:grid-cols-2">
                   <div className="space-y-2">
                     <label htmlFor="email" className="text-sm font-medium">Email Address *</label>
-                    <input id="email" value={data.email} onChange={e => handleUpdate('email', e.target.value)} type="email" placeholder="name@example.com" className={`w-full rounded-xl border bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#bd674b] ${errors.email ? 'border-red-400' : 'border-[#19352b]/10'}`} />
+                    <input id="email" value={data.email} onChange={e => handleUpdate('email', e.target.value)} type="email" placeholder="name@example.com" className={`w-full rounded-xl border bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308] ${errors.email ? 'border-red-400' : 'border-[#19352b]/10'}`} />
                     {errors.email && <p className="text-xs text-red-500">{errors.email}</p>}
                   </div>
                   <div className="space-y-2">
                     <label htmlFor="phone" className="text-sm font-medium">WhatsApp Number *</label>
-                    <input id="phone" value={data.phone} onChange={e => handleUpdate('phone', e.target.value)} type="tel" placeholder="+1 (555) 000-0000" className={`w-full rounded-xl border bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#bd674b] ${errors.phone ? 'border-red-400' : 'border-[#19352b]/10'}`} />
+                    <input id="phone" value={data.phone} onChange={e => handleUpdate('phone', e.target.value)} type="tel" placeholder="+1 (555) 000-0000" className={`w-full rounded-xl border bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308] ${errors.phone ? 'border-red-400' : 'border-[#19352b]/10'}`} />
                     {errors.phone && <p className="text-xs text-red-500">{errors.phone}</p>}
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <label htmlFor="country" className="text-sm font-medium">Country of Residence</label>
-                  <select id="country" value={data.country} onChange={e => handleUpdate('country', e.target.value)} className="w-full appearance-none rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#bd674b]">
+                  <select id="country" value={data.country} onChange={e => handleUpdate('country', e.target.value)} className="w-full appearance-none rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308]">
                     <option value="">Select country...</option>
                     {countries.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
@@ -345,8 +345,8 @@ export default function RegisterPage() {
                       { id: 'My family', icon: Users },
                       { id: 'Someone else', icon: HelpCircle }
                     ].map(({ id, icon: Icon }) => (
-                      <button key={id} type="button" onClick={() => handleUpdate('registerType', id)} className={`flex items-center gap-4 rounded-xl border p-4 text-left transition-all ${data.registerType === id ? 'border-[#bd674b] bg-[#bd674b]/5 shadow-sm' : 'border-[#19352b]/10 hover:border-[#19352b]/30 hover:bg-[#f8f6f0]/50'}`}>
-                        <div className={`flex size-10 items-center justify-center rounded-full ${data.registerType === id ? 'bg-[#bd674b] text-white' : 'bg-[#19352b]/5 text-[#19352b]/60'}`}>
+                      <button key={id} type="button" onClick={() => handleUpdate('registerType', id)} className={`flex items-center gap-4 rounded-xl border p-4 text-left transition-all ${data.registerType === id ? 'border-[#EAB308] bg-[#EAB308]/5 shadow-sm' : 'border-[#19352b]/10 hover:border-[#19352b]/30 hover:bg-[#f8f6f0]/50'}`}>
+                        <div className={`flex size-10 items-center justify-center rounded-full ${data.registerType === id ? 'bg-[#EAB308] text-white' : 'bg-[#19352b]/5 text-[#19352b]/60'}`}>
                           <Icon className="size-5" />
                         </div>
                         <span className="font-medium">{id}</span>
@@ -363,12 +363,12 @@ export default function RegisterPage() {
                       <div className="grid gap-6 pt-4 sm:grid-cols-2">
                         <div className="space-y-2">
                           <label className="text-sm font-medium">Child&apos;s First Name *</label>
-                          <input value={data.childFirstName} onChange={e => handleUpdate('childFirstName', e.target.value)} type="text" className={`w-full rounded-xl border bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#bd674b] ${errors.childFirstName ? 'border-red-400' : 'border-[#19352b]/10'}`} />
+                          <input value={data.childFirstName} onChange={e => handleUpdate('childFirstName', e.target.value)} type="text" className={`w-full rounded-xl border bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308] ${errors.childFirstName ? 'border-red-400' : 'border-[#19352b]/10'}`} />
                           {errors.childFirstName && <p className="text-xs text-red-500">{errors.childFirstName}</p>}
                         </div>
                         <div className="space-y-2">
                           <label className="text-sm font-medium">Child&apos;s Age *</label>
-                          <input value={data.childAge} onChange={e => handleUpdate('childAge', e.target.value)} type="number" min="3" max="17" className={`w-full rounded-xl border bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#bd674b] ${errors.childAge ? 'border-red-400' : 'border-[#19352b]/10'}`} />
+                          <input value={data.childAge} onChange={e => handleUpdate('childAge', e.target.value)} type="number" min="3" max="17" className={`w-full rounded-xl border bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308] ${errors.childAge ? 'border-red-400' : 'border-[#19352b]/10'}`} />
                           {errors.childAge && <p className="text-xs text-red-500">{errors.childAge}</p>}
                         </div>
                       </div>
@@ -378,7 +378,7 @@ export default function RegisterPage() {
                     <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
                       <div className="space-y-2 pt-4">
                         <label className="text-sm font-medium">Family Details (Ages, relationships, etc.)</label>
-                        <textarea value={data.familyDetails} onChange={e => handleUpdate('familyDetails', e.target.value)} rows={3} className="w-full rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#bd674b]" />
+                        <textarea value={data.familyDetails} onChange={e => handleUpdate('familyDetails', e.target.value)} rows={3} className="w-full rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308]" />
                       </div>
                     </motion.div>
                   )}
@@ -387,11 +387,11 @@ export default function RegisterPage() {
                       <div className="grid gap-6 pt-4 sm:grid-cols-2">
                         <div className="space-y-2">
                           <label className="text-sm font-medium">Learner&apos;s Name</label>
-                          <input value={data.otherLearnerName} onChange={e => handleUpdate('otherLearnerName', e.target.value)} type="text" className="w-full rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#bd674b]" />
+                          <input value={data.otherLearnerName} onChange={e => handleUpdate('otherLearnerName', e.target.value)} type="text" className="w-full rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308]" />
                         </div>
                         <div className="space-y-2">
                           <label className="text-sm font-medium">Your Relationship</label>
-                          <input value={data.otherRelationship} onChange={e => handleUpdate('otherRelationship', e.target.value)} type="text" className="w-full rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#bd674b]" />
+                          <input value={data.otherRelationship} onChange={e => handleUpdate('otherRelationship', e.target.value)} type="text" className="w-full rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308]" />
                         </div>
                       </div>
                     </motion.div>
@@ -424,8 +424,8 @@ export default function RegisterPage() {
                       return (
                         <button key={prog.id} onClick={() => {
                           handleUpdate('programs', selected ? data.programs.filter(p => p !== prog.title) : [...data.programs, prog.title])
-                        }} className={`flex text-left p-5 rounded-xl border transition-all ${selected ? 'border-[#bd674b] bg-[#bd674b]/5 shadow-sm' : 'border-[#19352b]/10 hover:border-[#19352b]/30'}`}>
-                          <div className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded border transition-colors ${selected ? 'border-[#bd674b] bg-[#bd674b] text-white' : 'border-[#19352b]/30'}`}>
+                        }} className={`flex text-left p-5 rounded-xl border transition-all ${selected ? 'border-[#EAB308] bg-[#EAB308]/5 shadow-sm' : 'border-[#19352b]/10 hover:border-[#19352b]/30'}`}>
+                          <div className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded border transition-colors ${selected ? 'border-[#EAB308] bg-[#EAB308] text-white' : 'border-[#19352b]/30'}`}>
                             {selected && <Check className="size-3.5" />}
                           </div>
                           <div className="ml-4">
@@ -495,7 +495,7 @@ export default function RegisterPage() {
                       <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
                         <div className="mt-4 space-y-2">
                           <label className="text-sm font-medium">My goal is... *</label>
-                          <input value={data.otherGoal} onChange={e => handleUpdate('otherGoal', e.target.value)} type="text" className={`w-full rounded-xl border bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#bd674b] ${errors.otherGoal ? 'border-red-400' : 'border-[#19352b]/10'}`} />
+                          <input value={data.otherGoal} onChange={e => handleUpdate('otherGoal', e.target.value)} type="text" className={`w-full rounded-xl border bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308] ${errors.otherGoal ? 'border-red-400' : 'border-[#19352b]/10'}`} />
                           {errors.otherGoal && <p className="text-xs text-red-500">{errors.otherGoal}</p>}
                         </div>
                       </motion.div>
@@ -512,7 +512,7 @@ export default function RegisterPage() {
                         {daysList.map(day => {
                           const s = data.preferredDays.includes(day)
                           return (
-                            <button key={day} onClick={() => handleUpdate('preferredDays', s ? data.preferredDays.filter(d => d !== day) : [...data.preferredDays, day])} className={`rounded-lg px-3 py-1.5 text-xs font-medium border transition-colors ${s ? 'bg-[#d8ad7b] border-[#d8ad7b]' : 'border-[#19352b]/20 hover:border-[#19352b]/40'}`}>
+                            <button key={day} onClick={() => handleUpdate('preferredDays', s ? data.preferredDays.filter(d => d !== day) : [...data.preferredDays, day])} className={`rounded-lg px-3 py-1.5 text-xs font-medium border transition-colors ${s ? 'bg-[#FDE047] border-[#FDE047]' : 'border-[#19352b]/20 hover:border-[#19352b]/40'}`}>
                               {day.slice(0,3)}
                             </button>
                           )
@@ -521,7 +521,7 @@ export default function RegisterPage() {
                     </div>
                     <div className="space-y-2">
                       <label className="text-sm font-medium">Time of day</label>
-                      <select value={data.preferredTime} onChange={e => handleUpdate('preferredTime', e.target.value)} className="w-full appearance-none rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#bd674b]">
+                      <select value={data.preferredTime} onChange={e => handleUpdate('preferredTime', e.target.value)} className="w-full appearance-none rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308]">
                         <option value="">Any time</option>
                         <option value="Morning">Morning</option>
                         <option value="Afternoon">Afternoon</option>
@@ -531,13 +531,13 @@ export default function RegisterPage() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Your Time Zone</label>
-                    <input value={data.timezone} onChange={e => handleUpdate('timezone', e.target.value)} type="text" placeholder="e.g. America/New_York or GMT+1" className="w-full rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#bd674b]" />
+                    <input value={data.timezone} onChange={e => handleUpdate('timezone', e.target.value)} type="text" placeholder="e.g. America/New_York or GMT+1" className="w-full rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308]" />
                   </div>
                 </div>
 
                 <div className="space-y-2 pt-8 border-t border-[#19352b]/10">
                   <label className="text-sm font-medium">How did you hear about LearnYorubaEasily? (Optional)</label>
-                  <select value={data.discovery} onChange={e => handleUpdate('discovery', e.target.value)} className="w-full appearance-none rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#bd674b]">
+                  <select value={data.discovery} onChange={e => handleUpdate('discovery', e.target.value)} className="w-full appearance-none rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308]">
                     <option value="">Please select...</option>
                     <option value="Google">Google / Search</option>
                     <option value="Instagram">Instagram</option>
@@ -569,7 +569,7 @@ export default function RegisterPage() {
                 
                 {/* Review: About You */}
                 <div className="rounded-3xl bg-white p-6 shadow-sm sm:p-10 border border-[#19352b]/5 relative">
-                  <button onClick={() => setStep('about')} className="absolute top-6 right-6 sm:top-10 sm:right-10 flex items-center text-sm font-medium text-[#bd674b] hover:underline"><Edit3 className="mr-1.5 size-4" /> Edit</button>
+                  <button onClick={() => setStep('about')} className="absolute top-6 right-6 sm:top-10 sm:right-10 flex items-center text-sm font-medium text-[#EAB308] hover:underline"><Edit3 className="mr-1.5 size-4" /> Edit</button>
                   <h3 className="font-serif text-2xl mb-6">About You</h3>
                   <div className="grid grid-cols-2 gap-y-4 gap-x-8 text-sm">
                     <div><span className="block text-[#19352b]/50">Name</span><span className="font-medium">{data.firstName} {data.lastName}</span></div>
@@ -585,7 +585,7 @@ export default function RegisterPage() {
 
                 {/* Review: Learning */}
                 <div className="rounded-3xl bg-white p-6 shadow-sm sm:p-10 border border-[#19352b]/5 relative">
-                  <button onClick={() => setStep('learning')} className="absolute top-6 right-6 sm:top-10 sm:right-10 flex items-center text-sm font-medium text-[#bd674b] hover:underline"><Edit3 className="mr-1.5 size-4" /> Edit</button>
+                  <button onClick={() => setStep('learning')} className="absolute top-6 right-6 sm:top-10 sm:right-10 flex items-center text-sm font-medium text-[#EAB308] hover:underline"><Edit3 className="mr-1.5 size-4" /> Edit</button>
                   <h3 className="font-serif text-2xl mb-6">Learning</h3>
                   <div className="space-y-4 text-sm">
                     <div><span className="block text-[#19352b]/50 mb-1">Programs Selected</span><div className="flex flex-wrap gap-2">{data.programs.map(p => <span key={p} className="bg-[#f8f6f0] px-3 py-1 rounded-md font-medium">{p}</span>)}</div></div>
@@ -595,7 +595,7 @@ export default function RegisterPage() {
 
                 {/* Review: Goals */}
                 <div className="rounded-3xl bg-white p-6 shadow-sm sm:p-10 border border-[#19352b]/5 relative">
-                  <button onClick={() => setStep('goals')} className="absolute top-6 right-6 sm:top-10 sm:right-10 flex items-center text-sm font-medium text-[#bd674b] hover:underline"><Edit3 className="mr-1.5 size-4" /> Edit</button>
+                  <button onClick={() => setStep('goals')} className="absolute top-6 right-6 sm:top-10 sm:right-10 flex items-center text-sm font-medium text-[#EAB308] hover:underline"><Edit3 className="mr-1.5 size-4" /> Edit</button>
                   <h3 className="font-serif text-2xl mb-6">Goals & Schedule</h3>
                   <div className="space-y-4 text-sm">
                     <div><span className="block text-[#19352b]/50 mb-1">Goals</span><div className="flex flex-wrap gap-2">{data.goals.map(g => <span key={g} className="bg-[#f8f6f0] px-3 py-1 rounded-md font-medium">{g === 'Other' ? `Other: ${data.otherGoal}` : g}</span>)}</div></div>
@@ -609,16 +609,16 @@ export default function RegisterPage() {
                 {/* Terms and Submit */}
                 <div className="pt-8">
                   <label className="flex items-start gap-4 cursor-pointer group">
-                    <div className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded border transition-colors ${data.termsAgreed ? 'border-[#bd674b] bg-[#bd674b] text-white' : 'border-[#19352b]/30 group-hover:border-[#19352b]/50 bg-white'}`}>
+                    <div className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded border transition-colors ${data.termsAgreed ? 'border-[#EAB308] bg-[#EAB308] text-white' : 'border-[#19352b]/30 group-hover:border-[#19352b]/50 bg-white'}`}>
                       {data.termsAgreed && <Check className="size-3.5" />}
                     </div>
                     <input type="checkbox" className="sr-only" checked={data.termsAgreed} onChange={(e) => handleUpdate('termsAgreed', e.target.checked)} />
-                    <span className="text-sm">I agree to the LearnYorubaEasily <Link href="/terms" target="_blank" className="underline hover:text-[#bd674b]">Terms of Service</Link> and <Link href="/privacy" target="_blank" className="underline hover:text-[#bd674b]">Privacy Policy</Link>. *</span>
+                    <span className="text-sm">I agree to the LearnYorubaEasily <Link href="/terms" target="_blank" className="underline hover:text-[#EAB308]">Terms of Service</Link> and <Link href="/privacy" target="_blank" className="underline hover:text-[#EAB308]">Privacy Policy</Link>. *</span>
                   </label>
                   {errors.termsAgreed && <p className="mt-2 ml-9 text-xs text-red-500">{errors.termsAgreed}</p>}
                   
                   <label className="flex items-start gap-4 mt-4 cursor-pointer group">
-                    <div className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded border transition-colors ${data.marketingAgreed ? 'border-[#bd674b] bg-[#bd674b] text-white' : 'border-[#19352b]/30 group-hover:border-[#19352b]/50 bg-white'}`}>
+                    <div className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded border transition-colors ${data.marketingAgreed ? 'border-[#EAB308] bg-[#EAB308] text-white' : 'border-[#19352b]/30 group-hover:border-[#19352b]/50 bg-white'}`}>
                       {data.marketingAgreed && <Check className="size-3.5" />}
                     </div>
                     <input type="checkbox" className="sr-only" checked={data.marketingAgreed} onChange={(e) => handleUpdate('marketingAgreed', e.target.checked)} />
@@ -655,9 +655,9 @@ export default function RegisterPage() {
                 <div className="pt-6">
                   <h3 className="font-semibold text-lg">What&apos;s Next?</h3>
                   <ul className="mt-4 space-y-3 text-sm text-[#19352b]/70">
-                    <li className="flex items-start gap-3"><div className="mt-1 size-1.5 shrink-0 rounded-full bg-[#bd674b]" /> We will review your registration and selected programs.</li>
-                    <li className="flex items-start gap-3"><div className="mt-1 size-1.5 shrink-0 rounded-full bg-[#bd674b]" /> We will message you directly on WhatsApp to provide your Zoom link and class materials.</li>
-                    <li className="flex items-start gap-3"><div className="mt-1 size-1.5 shrink-0 rounded-full bg-[#bd674b]" /> You will be ready to begin your Yorùbá learning journey!</li>
+                    <li className="flex items-start gap-3"><div className="mt-1 size-1.5 shrink-0 rounded-full bg-[#EAB308]" /> We will review your registration and selected programs.</li>
+                    <li className="flex items-start gap-3"><div className="mt-1 size-1.5 shrink-0 rounded-full bg-[#EAB308]" /> We will message you directly on WhatsApp to provide your Zoom link and class materials.</li>
+                    <li className="flex items-start gap-3"><div className="mt-1 size-1.5 shrink-0 rounded-full bg-[#EAB308]" /> You will be ready to begin your Yorùbá learning journey!</li>
                   </ul>
                 </div>
               </div>

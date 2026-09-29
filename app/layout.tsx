@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
+import { WhatsAppButton } from '@/components/WhatsAppButton'
 export const metadata: Metadata = {
   metadataBase: new URL('https://learnyorubaeasily.com'), // Replace with your actual domain when you have one
   title: 'LearnYorubaEasily — Learn Yorùbá with confidence',
@@ -58,6 +59,7 @@ export default function RootLayout({
         <main className="flex-1 pt-[76px]">
           {children}
         </main>
+        <WhatsAppButton />
         <Footer />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

@@ -18,7 +18,7 @@ export default async function Image() {
           alignItems: 'center',
           justifyContent: 'center',
           borderTop: '30px solid #19352b',
-          borderBottom: '30px solid #bd674b',
+          borderBottom: '30px solid #EAB308',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
@@ -43,7 +43,7 @@ export default async function Image() {
             letterSpacing: '-0.03em',
             fontWeight: 'normal',
           }}>
-            LearnYoruba<span style={{ color: '#bd674b' }}>Easily</span>
+            LearnYoruba<span style={{ color: '#EAB308' }}>Easily</span>
           </h1>
         </div>
         <p style={{

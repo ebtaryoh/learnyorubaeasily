@@ -22,8 +22,8 @@ export default function FaqPage() {
     <div className="min-h-screen bg-[#f0e9dd]">
       <section className="px-5 py-24 pt-32 lg:px-8 lg:pt-40">
         <motion.div className="mx-auto max-w-[1000px]" initial="hidden" animate="visible" variants={staggerContainer}>
-          <motion.p variants={fadeUpVariants} className="mb-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#bd674b]"><span className="h-px w-10 bg-[#bd674b]" /> FAQ</motion.p>
-          <motion.h1 variants={fadeUpVariants} className="font-serif text-5xl leading-[.95] tracking-[-.05em] md:text-7xl">Questions, <em className="text-[#bd674b]">answered.</em></motion.h1>
+          <motion.p variants={fadeUpVariants} className="mb-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#EAB308]"><span className="h-px w-10 bg-[#EAB308]" /> FAQ</motion.p>
+          <motion.h1 variants={fadeUpVariants} className="font-serif text-5xl leading-[.95] tracking-[-.05em] md:text-7xl">Questions, <em className="text-[#EAB308]">answered.</em></motion.h1>
           <motion.p variants={fadeUpVariants} className="mt-8 max-w-[600px] text-lg leading-8 text-[#19352b]/70">Find answers to the most common questions about our classes, community, and learning process.</motion.p>
         </motion.div>
       </section>
@@ -47,7 +47,7 @@ export default function FaqPage() {
           
           <motion.div variants={fadeUpVariants} className="mt-16 text-center">
             <p className="text-[#19352b]/70 mb-4">Still have questions?</p>
-            <Link href="/contact" className="inline-flex items-center text-sm font-semibold hover:text-[#bd674b] transition-colors">Get in touch <ArrowUpRight className="ml-2 size-4" /></Link>
+            <Link href="/contact" className="inline-flex items-center text-sm font-semibold hover:text-[#EAB308] transition-colors">Get in touch <ArrowUpRight className="ml-2 size-4" /></Link>
           </motion.div>
         </motion.div>
       </section>

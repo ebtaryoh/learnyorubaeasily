@@ -24,7 +24,7 @@ export default function Loading() {
           <motion.div 
             animate={{ rotate: 360 }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-            className="absolute -inset-1 rounded-full border-4 border-transparent border-t-[#bd674b]"
+            className="absolute -inset-1 rounded-full border-4 border-transparent border-t-[#EAB308]"
           />
           <div className="size-1.5 rounded-full bg-[#19352b]" />
         </div>

@@ -13,7 +13,7 @@ export default function PrivacyPolicyPage() {
         className="mx-auto max-w-3xl"
       >
         <div className="mb-12">
-          <Link href="/" className="text-sm font-semibold text-[#bd674b] hover:underline">
+          <Link href="/" className="text-sm font-semibold text-[#EAB308] hover:underline">
             &larr; Back to Home
           </Link>
           <h1 className="mt-4 font-serif text-4xl text-[#19352b] sm:text-5xl">Privacy Policy</h1>
@@ -75,7 +75,7 @@ export default function PrivacyPolicyPage() {
 
           <h2>7. Contact Us</h2>
           <p>
-            If you have any questions about this Privacy Policy, please contact us at via our <Link href="/contact" className="text-[#bd674b] hover:underline">Contact Page</Link>.
+            If you have any questions about this Privacy Policy, please contact us at via our <Link href="/contact" className="text-[#EAB308] hover:underline">Contact Page</Link>.
           </p>
         </div>
       </motion.div>

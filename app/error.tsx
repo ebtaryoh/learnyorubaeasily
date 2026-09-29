@@ -25,7 +25,7 @@ export default function ErrorBoundary({
         className="flex max-w-md flex-col items-center"
       >
         <div className="mb-8 flex size-24 items-center justify-center rounded-full bg-[#f2e5d8]">
-          <AlertTriangle className="size-10 text-[#bd674b]" strokeWidth={1.5} />
+          <AlertTriangle className="size-10 text-[#EAB308]" strokeWidth={1.5} />
         </div>
         
         <h1 className="font-serif text-3xl font-medium tracking-tight text-[#19352b] sm:text-4xl">
