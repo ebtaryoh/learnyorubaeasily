@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { ArrowUpRight, Mail, MapPin } from 'lucide-react'
+import { ArrowUpRight, Mail, MapPin, MessageCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { fadeUpVariants, staggerContainer } from '@/lib/animations'
 
@@ -83,6 +83,13 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold">Location</h3>
                     <p className="mt-1 text-sm text-[#19352b]/70">Global classes online</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex size-12 items-center justify-center rounded-full bg-[#19352b]/5"><MessageCircle className="size-5 text-[#EAB308]" /></div>
+                  <div>
+                    <h3 className="font-semibold">WhatsApp Community</h3>
+                    <a href="https://chat.whatsapp.com/BaZKdym3lFzC4Genqg43Rh" target="_blank" className="mt-1 text-sm text-[#19352b]/70 hover:text-[#EAB308] transition-colors inline-flex items-center">Join our study group <ArrowUpRight className="ml-1 size-3" /></a>
                   </div>
                 </div>
               </motion.div>

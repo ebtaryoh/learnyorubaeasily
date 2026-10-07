@@ -141,6 +141,29 @@ export default function HomePage() {
         </motion.div>
       </section>
 
+      {/* Community Section */}
+      <section className="border-t border-[#19352b]/10 bg-white px-5 py-24 lg:px-8">
+        <motion.div className="mx-auto max-w-[1240px]" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer}>
+          <div className="rounded-[32px] bg-[#e6eee5] p-8 md:p-16 flex flex-col items-center text-center">
+            <motion.div variants={fadeUpVariants} className="flex size-16 items-center justify-center rounded-full bg-[#25D366] text-white shadow-xl mb-8">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+            </motion.div>
+            <motion.p variants={fadeUpVariants} className="eyebrow text-[#19352b]">Join our community</motion.p>
+            <motion.h2 variants={fadeUpVariants} className="mt-4 max-w-[600px] font-serif text-4xl leading-tight tracking-[-.04em] sm:text-5xl">
+              Practice makes perfect. <em className="text-[#EAB308]">Practice together.</em>
+            </motion.h2>
+            <motion.p variants={fadeUpVariants} className="mt-6 max-w-[500px] text-lg text-[#19352b]/70">
+              Join our free WhatsApp study group to practice speaking, ask questions, and connect with other Yorùbá learners worldwide.
+            </motion.p>
+            <motion.div variants={fadeUpVariants} className="mt-10">
+              <a href="https://chat.whatsapp.com/BaZKdym3lFzC4Genqg43Rh" target="_blank" className="inline-flex items-center justify-center rounded-full bg-[#19352b] px-8 py-4 font-semibold text-white transition-transform hover:-translate-y-1">
+                Join WhatsApp Group <ArrowUpRight className="ml-2 size-5" />
+              </a>
+            </motion.div>
+          </div>
+        </motion.div>
+      </section>
+
       {/* Testimonials */}
       <section className="bg-[#19352b] px-5 py-24 text-[#f8f6f0] lg:px-8">
         <motion.div className="mx-auto max-w-[1240px]" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer}>

@@ -21,6 +21,7 @@ export function Header() {
 
   const navItems = [
     { name: 'Classes', href: '/classes' },
+    { name: 'Practice', href: '/practice' },
     { name: 'About', href: '/about' },
     { name: 'FAQ', href: '/faq' },
   ]

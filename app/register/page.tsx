@@ -4,7 +4,7 @@ import { useState, useEffect, FormEvent } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { EASING, DURATION } from '@/lib/animations'
-import { ArrowLeft, Check, ChevronRight, User, Users, Baby, HelpCircle, Loader2, Edit3 } from 'lucide-react'
+import { ArrowLeft, Check, ChevronRight, User, Users, Baby, HelpCircle, Loader2, Edit3, MessageCircle } from 'lucide-react'
 
 // --- TYPES & INITIAL STATE ---
 type RegistrationType = 'Myself' | 'My child' | 'My family' | 'Someone else' | ''
@@ -667,7 +667,10 @@ export default function RegisterPage() {
               </div>
               
               <div className="mt-12 flex flex-col gap-4 sm:flex-row w-full sm:w-auto justify-center">
-                <Link href="/" className="inline-flex items-center justify-center rounded-full bg-[#19352b] px-8 py-4 font-semibold text-white transition-transform hover:-translate-y-1">
+                <a href="https://chat.whatsapp.com/BaZKdym3lFzC4Genqg43Rh" target="_blank" className="inline-flex items-center justify-center rounded-full bg-[#25D366] px-8 py-4 font-semibold text-white transition-transform hover:-translate-y-1 shadow-md hover:shadow-lg">
+                  <MessageCircle className="mr-2 size-5" /> Join WhatsApp Group
+                </a>
+                <Link href="/" className="inline-flex items-center justify-center rounded-full border-2 border-[#19352b]/20 px-8 py-4 font-semibold text-[#19352b] transition-colors hover:bg-[#19352b]/5">
                   Back to Homepage
                 </Link>
               </div>
