@@ -15,7 +15,8 @@ export default function ContactPage() {
     lastName: '',
     email: '',
     program: 'Adult Yorùbá Classes',
-    message: ''
+    message: '',
+    botField: ''
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -29,6 +30,16 @@ export default function ContactPage() {
     e.preventDefault()
     setIsSubmitting(true)
     setError('')
+
+    // Honeypot check - if a bot fills this hidden field, silently reject
+    if (formData.botField) {
+      setTimeout(() => {
+        setIsSubmitting(false)
+        setIsSuccess(true)
+        setFormData({ firstName: '', lastName: '', email: '', program: 'Adult Yorùbá Classes', message: '', botField: '' })
+      }, 500)
+      return
+    }
     
     try {
       const SCRIPT_URL = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbyVlNMvIlkWpBcQCXne0TE6fvZ6Oi8FNs0ftYfJfj6x-pdLyCC6vvF2lITDLSop1kcn/exec'
@@ -36,6 +47,7 @@ export default function ContactPage() {
       const searchParams = new URLSearchParams()
       searchParams.append('registerType', 'Contact Form Inquiry') // So they know it's not a full registration
       Object.entries(formData).forEach(([key, value]) => {
+        if (key === 'botField') return // Don't send honeypot field to script
         searchParams.append(key, value)
       })
       searchParams.append('timestamp', new Date().toISOString())
@@ -51,7 +63,7 @@ export default function ContactPage() {
 
       setIsSubmitting(false)
       setIsSuccess(true)
-      setFormData({ firstName: '', lastName: '', email: '', program: 'Adult Yorùbá Classes', message: '' })
+      setFormData({ firstName: '', lastName: '', email: '', program: 'Adult Yorùbá Classes', message: '', botField: '' })
       
     } catch (err) {
       console.error(err)
@@ -107,6 +119,11 @@ export default function ContactPage() {
                 </div>
               ) : (
                 <form className="space-y-6" onSubmit={handleSubmit}>
+                  {/* Honeypot field - invisible to humans, bots will fill it */}
+                  <div style={{ display: 'none' }} aria-hidden="true">
+                    <label htmlFor="botField">Do not fill this out if you are human</label>
+                    <input type="text" name="botField" id="botField" value={formData.botField} onChange={handleChange} tabIndex={-1} autoComplete="off" />
+                  </div>
                   <div className="grid grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-sm font-medium">First name</label>
