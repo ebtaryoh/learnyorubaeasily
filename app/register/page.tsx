@@ -16,6 +16,7 @@ interface RegistrationData {
   email: string;
   phone: string;
   country: string;
+  cityState: string;
   registerType: RegistrationType;
   
   childFirstName: string;
@@ -30,22 +31,27 @@ interface RegistrationData {
 
   goals: string[];
   otherGoal: string;
+  whyLearn: string;
+  expectations: string;
 
   preferredDays: string[];
   preferredTime: string;
   timezone: string;
   discovery: string;
 
+  pricingAgreed: boolean;
   termsAgreed: boolean;
   marketingAgreed: boolean;
+  additionalNotes: string;
+  whatsappConfirmed: boolean;
 }
 
 const initialData: RegistrationData = {
-  firstName: '', lastName: '', email: '', phone: '', country: '', registerType: '',
+  firstName: '', lastName: '', email: '', phone: '', country: '', cityState: '', registerType: '',
   childFirstName: '', childLastName: '', childAge: '', familyDetails: '', otherLearnerName: '', otherRelationship: '',
-  programs: [], level: '', goals: [], otherGoal: '',
+  programs: [], level: '', goals: [], otherGoal: '', whyLearn: '', expectations: '',
   preferredDays: [], preferredTime: '', timezone: '', discovery: '',
-  termsAgreed: false, marketingAgreed: false,
+  pricingAgreed: false, termsAgreed: false, marketingAgreed: false, additionalNotes: '', whatsappConfirmed: false,
 }
 
 const STORAGE_KEY = 'lye_registration_draft'
@@ -82,7 +88,7 @@ const daysList = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Satur
 
 export default function RegisterPage() {
   const [mounted, setMounted] = useState(false)
-  const [step, setStep] = useState<Step>('intro')
+  const [step, setStep] = useState<Step>('about')
   const [data, setData] = useState<RegistrationData>(initialData)
   const [errors, setErrors] = useState<Partial<Record<keyof RegistrationData, string>>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -171,8 +177,13 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    if (!data.termsAgreed) {
-      setErrors({ termsAgreed: 'You must agree to the Terms of Service to continue.' })
+    const newErrors: any = {}
+    if (!data.termsAgreed) newErrors.termsAgreed = 'You must agree to the Terms of Service to continue.'
+    if (!data.pricingAgreed) newErrors.pricingAgreed = 'Please confirm agreement to the lesson schedule & pricing.'
+    if (!data.whatsappConfirmed) newErrors.whatsappConfirmed = 'Please confirm your WhatsApp number is accurate.'
+    
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors)
       return
     }
     
@@ -241,66 +252,66 @@ export default function RegisterPage() {
 
   // --- SUB-COMPONENTS ---
   const ProgressIndicator = () => {
-    const steps: Step[] = ['about', 'learning', 'goals', 'review']
-    const currentIndex = steps.indexOf(step)
+    const steps: { id: Step; label: string }[] = [
+      { id: 'about', label: '1. About You' },
+      { id: 'learning', label: '2. Programs & Level' },
+      { id: 'goals', label: '3. Goals & Schedule' },
+      { id: 'review', label: '4. Review & Confirm' }
+    ]
+    const currentIndex = steps.findIndex(s => s.id === step)
     if (currentIndex === -1) return null
 
     return (
-      <div className="mb-12 flex items-center justify-center sm:justify-start">
-        {steps.map((s, i) => (
-          <div key={s} className="flex items-center">
-            <div className={`flex size-8 items-center justify-center rounded-full text-xs font-bold transition-colors ${
-              i <= currentIndex ? 'bg-[#EAB308] text-white' : 'bg-[#19352b]/10 text-[#19352b]/50'
-            }`}>
-              {i < currentIndex ? <Check className="size-4" /> : i + 1}
+      <div className="mb-8">
+        <div className="grid grid-cols-4 gap-2 sm:gap-4 max-w-xl">
+          {steps.map((s, i) => (
+            <div key={s.id} className="flex flex-col gap-1.5">
+              <div className={`h-1.5 rounded-full transition-all ${
+                i <= currentIndex ? 'bg-[#EAB308]' : 'bg-[#19352b]/10'
+              }`} />
+              <span className={`text-[11px] font-semibold truncate ${
+                i === currentIndex ? 'text-[#19352b]' : 'text-[#19352b]/40'
+              }`}>
+                {s.label}
+              </span>
             </div>
-            {i < steps.length - 1 && (
-              <div className={`h-1 w-10 sm:w-16 transition-colors ${i < currentIndex ? 'bg-[#EAB308]' : 'bg-[#19352b]/10'}`} />
-            )}
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     )
   }
 
   return (
-    <main className="min-h-screen bg-[#f8f6f0] text-[#19352b]">
-      {/* Mini Header */}
-      <header className="border-b border-[#19352b]/10 bg-white/50 backdrop-blur-md">
-        <div className="mx-auto flex h-[76px] max-w-[800px] items-center justify-between px-5">
-          <Link href="/" className="flex items-center gap-2" aria-label="Back to home">
-            <span className="flex size-8 items-center justify-center rounded-full bg-[#19352b] text-xs font-semibold text-[#f8f6f0]">LY</span>
-            <span className="hidden font-serif text-[17px] tracking-[-0.03em] sm:block">LearnYoruba<span className="text-[#EAB308]">Easily</span></span>
-          </Link>
-          {step !== 'success' && step !== 'intro' && (
-            <button onClick={() => setStep('intro')} className="text-sm font-medium text-[#19352b]/60 hover:text-[#19352b]">Save & Exit</button>
-          )}
-        </div>
-      </header>
+    <div className="min-h-screen bg-[#f8f6f0] text-[#19352b] py-8 sm:py-12 px-5 sm:px-8">
+      <div className="mx-auto max-w-5xl">
+        
+        {/* Header Banner */}
+        {step !== 'success' && (
+          <div className="mb-8">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EAB308]/20 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-[#19352b]">
+              🌿 Online Student Registration
+            </span>
+            <h1 className="mt-2 font-serif text-3xl sm:text-4xl text-[#19352b] tracking-tight">
+              Start Your Yorùbá Learning Journey
+            </h1>
+            <p className="mt-1 text-sm text-[#19352b]/70 max-w-2xl">
+              Fill out this quick form so we can match you or your child with the right cohort or 1-on-1 native tutor and schedule your live virtual class.
+            </p>
+          </div>
+        )}
 
-      <div className="mx-auto max-w-[800px] px-5 py-12 pb-24">
-        <AnimatePresence mode="wait">
+        <div className="grid gap-8 lg:grid-cols-[1fr_320px] items-start">
           
-          {/* STEP: INTRO */}
-          {step === 'intro' && (
-            <motion.div key="intro" {...pageTransition} className="flex min-h-[60vh] flex-col justify-center text-center">
-              <h1 className="font-serif text-5xl leading-tight tracking-[-.05em] md:text-6xl">Start Your Yorùbá <br /><em className="text-[#EAB308]">Learning Journey.</em></h1>
-              <p className="mx-auto mt-6 max-w-[500px] text-lg text-[#19352b]/70">Tell us a little about yourself and what you&apos;d like to achieve. We&apos;ll use your answers to help create the right learning experience for you.</p>
-              
-              <div className="mx-auto mt-12 flex flex-col gap-4 sm:flex-row justify-center">
-                <button onClick={() => handleNext('intro')} className="inline-flex items-center justify-center rounded-full bg-[#19352b] px-8 py-4 font-semibold text-white transition-transform hover:-translate-y-1">
-                  Begin Registration <ChevronRight className="ml-2 size-5" />
-                </button>
-              </div>
-            </motion.div>
-          )}
+          {/* Main Form Area */}
+          <div>
+            <ProgressIndicator />
 
-          {/* STEP: ABOUT YOU */}
-          {step === 'about' && (
-            <motion.div key="about" {...pageTransition}>
-              <ProgressIndicator />
-              <h2 className="font-serif text-4xl">About You</h2>
-              <p className="mt-2 text-[#19352b]/70">Let&apos;s start with a few details.</p>
+            <AnimatePresence mode="wait">
+              {/* STEP: ABOUT YOU */}
+              {step === 'about' && (
+                <motion.div key="about" {...pageTransition}>
+                  <h2 className="font-serif text-2xl sm:text-3xl">About You</h2>
+                  <p className="mt-1 text-sm text-[#19352b]/70">Let&apos;s start with your contact and learner details.</p>
 
               <div className="mt-10 space-y-8 rounded-3xl bg-white p-6 shadow-sm sm:p-10 border border-[#19352b]/5">
                 <div className="grid gap-6 sm:grid-cols-2">
@@ -329,12 +340,18 @@ export default function RegisterPage() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label htmlFor="country" className="text-sm font-medium">Country of Residence</label>
-                  <select id="country" value={data.country} onChange={e => handleUpdate('country', e.target.value)} className="w-full appearance-none rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308]">
-                    <option value="">Select country...</option>
-                    {countries.map(c => <option key={c} value={c}>{c}</option>)}
-                  </select>
+                <div className="grid gap-6 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <label htmlFor="country" className="text-sm font-medium">Country of Residence</label>
+                    <select id="country" value={data.country} onChange={e => handleUpdate('country', e.target.value)} className="w-full appearance-none rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308]">
+                      <option value="">Select country...</option>
+                      {countries.map(c => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="cityState" className="text-sm font-medium">City / State (e.g. Dallas, Texas)</label>
+                    <input id="cityState" value={data.cityState} onChange={e => handleUpdate('cityState', e.target.value)} type="text" placeholder="e.g. Dallas, Texas or London" className="w-full rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308]" />
+                  </div>
                 </div>
 
                 <div className="space-y-4 pt-4 border-t border-[#19352b]/10">
@@ -504,6 +521,18 @@ export default function RegisterPage() {
                   </AnimatePresence>
                 </div>
 
+                <div className="space-y-4 pt-8 border-t border-[#19352b]/10">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Why do you want to learn Yorùbá?</label>
+                    <textarea value={data.whyLearn} onChange={e => handleUpdate('whyLearn', e.target.value)} rows={2} placeholder="e.g. Connecting with heritage, family communication, cultural pride..." className="w-full rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 p-4 outline-none transition-colors focus:border-[#EAB308]" />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">What are your expectations from LearnYorubaEasily?</label>
+                    <textarea value={data.expectations} onChange={e => handleUpdate('expectations', e.target.value)} rows={2} placeholder="e.g. Conversational confidence within 3 months, understanding tones, interactive homework..." className="w-full rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 p-4 outline-none transition-colors focus:border-[#EAB308]" />
+                  </div>
+                </div>
+
                 <div className="space-y-6 pt-8 border-t border-[#19352b]/10">
                   <h3 className="text-lg font-semibold">Preferred Schedule (Optional)</h3>
                   <div className="grid gap-6 sm:grid-cols-2">
@@ -540,11 +569,13 @@ export default function RegisterPage() {
                   <label className="text-sm font-medium">How did you hear about LearnYorubaEasily? (Optional)</label>
                   <select value={data.discovery} onChange={e => handleUpdate('discovery', e.target.value)} className="w-full appearance-none rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308]">
                     <option value="">Please select...</option>
-                    <option value="Google">Google / Search</option>
+                    <option value="WhatsApp">WhatsApp</option>
+                    <option value="Twitter">Twitter / X</option>
                     <option value="Instagram">Instagram</option>
                     <option value="Facebook">Facebook</option>
+                    <option value="Friend">Friend / Referral</option>
+                    <option value="Google">Google / Search</option>
                     <option value="YouTube">YouTube</option>
-                    <option value="Referral">Friend / Family</option>
                     <option value="Other">Other</option>
                   </select>
                 </div>
@@ -607,8 +638,54 @@ export default function RegisterPage() {
                   </div>
                 </div>
 
+                {/* Additional Information / Notes */}
+                <div className="rounded-3xl bg-white p-6 shadow-sm sm:p-10 border border-[#19352b]/5 space-y-2">
+                  <label className="text-sm font-semibold">Do you have any other information you would like to pass across to us? (Optional)</label>
+                  <textarea value={data.additionalNotes} onChange={e => handleUpdate('additionalNotes', e.target.value)} rows={3} placeholder="Any specific learning needs, background, scheduling preferences, or questions for your tutor..." className="w-full rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 p-4 outline-none transition-colors focus:border-[#EAB308]" />
+                </div>
+
+                {/* Lesson Pricing & Scheduling Agreement */}
+                <div className="rounded-3xl bg-white p-6 shadow-sm sm:p-10 border border-[#19352b]/5 space-y-4">
+                  <div className="rounded-2xl bg-[#f8f6f0] p-6 border border-[#19352b]/10 space-y-3">
+                    <span className="inline-block rounded-full bg-[#EAB308]/20 px-3 py-1 text-xs font-bold text-[#19352b]">
+                      One-on-One Lesson Policy & Pricing
+                    </span>
+                    <p className="text-sm text-[#19352b]/85 leading-relaxed">
+                      One-on-one lessons are held <strong>any day of the week, 1–2 times a week</strong> (within 1–2 hours per day).
+                    </p>
+                    <div className="flex flex-wrap gap-3 pt-1 text-xs font-semibold">
+                      <span className="bg-white px-3.5 py-1.5 rounded-lg border border-[#19352b]/10 text-[#19352b]">Adults: $25 USD / hour</span>
+                      <span className="bg-white px-3.5 py-1.5 rounded-lg border border-[#19352b]/10 text-[#19352b]">Kids: $20 USD / hour</span>
+                      <span className="text-[#577565] self-center">Sibling & group discounts available upon request</span>
+                    </div>
+                  </div>
+
+                  <label className="flex items-start gap-4 cursor-pointer group pt-2">
+                    <div className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded border transition-colors ${data.pricingAgreed ? 'border-[#EAB308] bg-[#EAB308] text-white' : 'border-[#19352b]/30 group-hover:border-[#19352b]/50 bg-white'}`}>
+                      {data.pricingAgreed && <Check className="size-3.5" />}
+                    </div>
+                    <input type="checkbox" className="sr-only" checked={data.pricingAgreed} onChange={(e) => handleUpdate('pricingAgreed', e.target.checked)} />
+                    <span className="text-sm font-medium">I understand and agree to the 1-on-1 lesson schedule and pricing terms. *</span>
+                  </label>
+                  {errors.pricingAgreed && <p className="mt-1 ml-9 text-xs text-red-500">{errors.pricingAgreed}</p>}
+                </div>
+
+                {/* WhatsApp 24-Hour Notice Confirmation */}
+                <div className="rounded-3xl bg-[#e6eee5] p-6 sm:p-8 border border-[#577565]/20 space-y-3">
+                  <label className="flex items-start gap-4 cursor-pointer group">
+                    <div className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded border transition-colors ${data.whatsappConfirmed ? 'border-[#577565] bg-[#577565] text-white' : 'border-[#19352b]/30 group-hover:border-[#19352b]/50 bg-white'}`}>
+                      {data.whatsappConfirmed && <Check className="size-3.5" />}
+                    </div>
+                    <input type="checkbox" className="sr-only" checked={data.whatsappConfirmed} onChange={(e) => handleUpdate('whatsappConfirmed', e.target.checked)} />
+                    <span className="text-sm text-[#19352b]">
+                      <strong>WhatsApp 24-Hour Confirmation:</strong> We will reach out to you via WhatsApp as soon as we receive your registration (within 24 hours). I confirm that my WhatsApp contact number (<strong>{data.phone || 'provided above'}</strong>) is accurate and active. Ẹ ṣeun o. *
+                    </span>
+                  </label>
+                  {errors.whatsappConfirmed && <p className="mt-1 ml-9 text-xs text-red-500">{errors.whatsappConfirmed}</p>}
+                </div>
+
                 {/* Terms and Submit */}
-                <div className="pt-8">
+                <div className="pt-6">
                   <label className="flex items-start gap-4 cursor-pointer group">
                     <div className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded border transition-colors ${data.termsAgreed ? 'border-[#EAB308] bg-[#EAB308] text-white' : 'border-[#19352b]/30 group-hover:border-[#19352b]/50 bg-white'}`}>
                       {data.termsAgreed && <Check className="size-3.5" />}
@@ -678,7 +755,70 @@ export default function RegisterPage() {
           )}
 
         </AnimatePresence>
+          </div>
+
+          {/* Right Sidebar (Trust, Pricing & Support) */}
+          {step !== 'success' && (
+            <aside className="space-y-6 hidden lg:block sticky top-28">
+              {/* What to expect card */}
+              <div className="rounded-3xl bg-white p-6 border border-[#19352b]/10 shadow-sm space-y-4">
+                <h3 className="font-serif text-lg font-semibold text-[#19352b]">What to Expect</h3>
+                <ul className="space-y-3.5 text-xs text-[#19352b]/80">
+                  <li className="flex items-start gap-2.5">
+                    <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-[#e6eee5] text-[#577565] font-bold text-[10px]">✓</span>
+                    <span><strong>100% Live Video Lessons:</strong> Interactive sessions on Zoom or Google Meet with real-time feedback.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-[#e6eee5] text-[#577565] font-bold text-[10px]">✓</span>
+                    <span><strong>Patient Native Tutors:</strong> Dedicated instructors who break down tones, vowels, and phrases clearly.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-[#e6eee5] text-[#577565] font-bold text-[10px]">✓</span>
+                    <span><strong>WhatsApp Study Group:</strong> Free community access for daily speaking practice and cultural proverbs.</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Pricing breakdown card */}
+              <div className="rounded-3xl bg-[#19352b] text-[#f8f6f0] p-6 shadow-sm space-y-3">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#FDE047]">Transparent Rates</span>
+                <div className="space-y-2 pt-1 border-t border-white/10 text-xs">
+                  <div className="flex justify-between items-center py-1.5 border-b border-white/10">
+                    <span>Adult Private (1-on-1)</span>
+                    <strong className="text-sm text-white font-mono">$25 / hr</strong>
+                  </div>
+                  <div className="flex justify-between items-center py-1.5 border-b border-white/10">
+                    <span>Kids 1-on-1 Tutoring</span>
+                    <strong className="text-sm text-white font-mono">$20 / hr</strong>
+                  </div>
+                  <div className="flex justify-between items-center py-1.5">
+                    <span>Group Classes</span>
+                    <span className="text-[#FDE047] font-medium">Cohort schedules</span>
+                  </div>
+                </div>
+                <p className="text-[11px] text-[#f8f6f0]/60 leading-relaxed pt-1">
+                  Rescheduling is flexible with at least 24 hours advance notice.
+                </p>
+              </div>
+
+              {/* Help & WhatsApp Card */}
+              <div className="rounded-3xl bg-[#e6eee5] p-5 border border-[#19352b]/10 text-xs space-y-2">
+                <p className="font-semibold text-[#19352b]">Questions before registering?</p>
+                <p className="text-[#19352b]/70">We&apos;re happy to assist with cohort times, tutor placement, or family plans.</p>
+                <a
+                  href="https://wa.me/+2348185051113?text=Hello!%20I%20have%20a%20question%20about%20registering%20for%20LearnYorubaEasily%20classes"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 font-semibold text-[#19352b] hover:text-[#EAB308] pt-1"
+                >
+                  <MessageCircle className="size-4 text-[#25D366]" /> Chat on WhatsApp &rarr;
+                </a>
+              </div>
+            </aside>
+          )}
+
+        </div>
       </div>
-    </main>
+    </div>
   )
 }

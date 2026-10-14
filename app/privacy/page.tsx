@@ -17,7 +17,7 @@ export default function PrivacyPolicyPage() {
             &larr; Back to Home
           </Link>
           <h1 className="mt-4 font-serif text-4xl text-[#19352b] sm:text-5xl">Privacy Policy</h1>
-          <p className="mt-4 text-[#19352b]/60">Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+          <p className="mt-4 text-[#19352b]/60">Last updated: October 13, 2026</p>
         </div>
 
         <div className="prose prose-lg prose-p:text-[#19352b]/80 prose-headings:font-serif prose-headings:text-[#19352b] max-w-none">

@@ -4,7 +4,7 @@ export const EASING = {
   expressive: [0.34, 1.56, 0.64, 1],
   entrance: [0.0, 0.0, 0.2, 1],
   exit: [0.4, 0.0, 1, 1],
-}
+} as const
 
 export const DURATION = {
   micro: 0.2,

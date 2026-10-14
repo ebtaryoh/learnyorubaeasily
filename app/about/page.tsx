@@ -43,6 +43,82 @@ export default function AboutPage() {
           </motion.div>
         </motion.div>
       </section>
+
+      {/* Our Values */}
+      <section className="px-5 py-24 lg:px-8">
+        <motion.div className="mx-auto max-w-[1240px]" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer}>
+          <div className="text-center max-w-[700px] mx-auto mb-16">
+            <motion.p variants={fadeUpVariants} className="eyebrow mx-auto justify-center text-[#EAB308]">
+              What Guides Us
+            </motion.p>
+            <motion.h2 variants={fadeUpVariants} className="mt-4 font-serif text-4xl leading-tight tracking-[-.04em] sm:text-5xl">
+              Rooted in culture, designed for <em className="text-[#EAB308]">real life.</em>
+            </motion.h2>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-3">
+            {[
+              {
+                title: 'Cultural Depth',
+                desc: 'Beyond vocabulary, we impart the rich proverbs (òwe), tonal beauty, and cultural context that make Yorùbá an expressive art.',
+              },
+              {
+                title: 'Patient & Inclusive',
+                desc: 'Whether you are a complete beginner, a heritage learner reconnecting, or raising bilingual children, our spaces are warm and non-judgmental.',
+              },
+              {
+                title: 'Conversational Confidence',
+                desc: 'We prioritize real-life speaking and listening from your very first lesson, giving you tools to speak with family, elders, and peers.',
+              },
+            ].map((value) => (
+              <motion.div
+                key={value.title}
+                variants={fadeUpVariants}
+                className="rounded-3xl border border-[#19352b]/10 bg-white/70 p-8 shadow-sm backdrop-blur-sm"
+              >
+                <div className="mb-4 inline-block size-3 rounded-full bg-[#EAB308]" />
+                <h3 className="font-serif text-2xl tracking-tight text-[#19352b]">{value.title}</h3>
+                <p className="mt-4 leading-7 text-[#19352b]/70">{value.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </section>
+
+      {/* CTA */}
+      <section className="border-t border-[#19352b]/10 bg-[#e6eee5] px-5 py-20 lg:px-8">
+        <motion.div
+          className="mx-auto max-w-[900px] text-center"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+        >
+          <motion.p variants={fadeUpVariants} className="eyebrow mx-auto justify-center text-[#19352b]">
+            Begin Your Journey
+          </motion.p>
+          <motion.h2 variants={fadeUpVariants} className="mt-4 font-serif text-4xl leading-tight tracking-[-.04em] sm:text-5xl text-[#19352b]">
+            Ready to speak Yorùbá with <em className="text-[#EAB308]">pride?</em>
+          </motion.h2>
+          <motion.p variants={fadeUpVariants} className="mx-auto mt-6 max-w-[540px] text-lg text-[#19352b]/75">
+            Join a vibrant community of learners around the world. We offer classes for adults, kids, and private one-on-one sessions.
+          </motion.p>
+          <motion.div variants={fadeUpVariants} className="mt-10 flex flex-wrap items-center justify-center gap-4">
+            <Link
+              href="/classes"
+              className="inline-flex items-center justify-center rounded-full bg-[#19352b] px-8 py-4 font-semibold text-white transition-transform hover:-translate-y-1"
+            >
+              Explore Classes <ArrowUpRight className="ml-2 size-5" />
+            </Link>
+            <Link
+              href="/register"
+              className="inline-flex items-center justify-center rounded-full bg-[#EAB308] px-8 py-4 font-semibold text-[#19352b] transition-transform hover:-translate-y-1"
+            >
+              Register Now <ArrowUpRight className="ml-2 size-5" />
+            </Link>
+          </motion.div>
+        </motion.div>
+      </section>
     </div>
   )
 }

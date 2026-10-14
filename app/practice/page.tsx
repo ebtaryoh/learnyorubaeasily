@@ -1,8 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight, RotateCcw, Volume2, Sparkles } from 'lucide-react'
+import { ChevronLeft, ChevronRight, RotateCcw, Volume2, Sparkles, Shuffle } from 'lucide-react'
+import { TonePlayground } from '@/components/interactive/TonePlayground'
+import { TalkingDrum } from '@/components/interactive/TalkingDrum'
+import { FluencyQuiz } from '@/components/interactive/FluencyQuiz'
+import { speakYorubaPhrase } from '@/lib/audio'
 
 // --- MOCK DATA ---
 const flashcards = [
@@ -120,28 +124,40 @@ export default function PracticePage() {
   const [isFlipped, setIsFlipped] = useState(false)
   const [direction, setDirection] = useState(0)
   const [activeCategory, setActiveCategory] = useState("All")
+  const [isSpeaking, setIsSpeaking] = useState(false)
+  const [isShuffled, setIsShuffled] = useState(false)
+  const [shuffledList, setShuffledList] = useState<typeof flashcards | null>(null)
 
   const categories = ["All", ...Array.from(new Set(flashcards.map(card => card.category)))]
-  const filteredCards = activeCategory === "All" ? flashcards : flashcards.filter(card => card.category === activeCategory)
+  const baseCards = activeCategory === "All" ? flashcards : flashcards.filter(card => card.category === activeCategory)
+  const displayedCards = isShuffled && shuffledList ? shuffledList : baseCards
 
-  const card = filteredCards[currentIndex]
-  const progress = ((currentIndex + 1) / filteredCards.length) * 100
+  const card = displayedCards[currentIndex] || displayedCards[0]
+  const progress = ((currentIndex + 1) / displayedCards.length) * 100
 
-  const handleNext = () => {
-    if (currentIndex < filteredCards.length - 1) {
+  const speakWord = useCallback((text: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation()
+    speakYorubaPhrase(text, {
+      onStart: () => setIsSpeaking(true),
+      onEnd: () => setIsSpeaking(false)
+    })
+  }, [])
+
+  const handleNext = useCallback(() => {
+    if (currentIndex < displayedCards.length - 1) {
       setDirection(1)
       setIsFlipped(false)
       setCurrentIndex(prev => prev + 1)
     }
-  }
+  }, [currentIndex, displayedCards.length])
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     if (currentIndex > 0) {
       setDirection(-1)
       setIsFlipped(false)
       setCurrentIndex(prev => prev - 1)
     }
-  }
+  }, [currentIndex])
 
   const handleRestart = () => {
     setDirection(-1)
@@ -149,8 +165,24 @@ export default function PracticePage() {
     setCurrentIndex(0)
   }
 
+  const handleToggleShuffle = () => {
+    if (!isShuffled) {
+      const shuffled = [...baseCards].sort(() => Math.random() - 0.5)
+      setShuffledList(shuffled)
+      setIsShuffled(true)
+    } else {
+      setShuffledList(null)
+      setIsShuffled(false)
+    }
+    setCurrentIndex(0)
+    setIsFlipped(false)
+    setDirection(0)
+  }
+
   const handleCategoryChange = (cat: string) => {
     setActiveCategory(cat)
+    setShuffledList(null)
+    setIsShuffled(false)
     setCurrentIndex(0)
     setIsFlipped(false)
     setDirection(0)
@@ -182,12 +214,12 @@ export default function PracticePage() {
         {/* Header */}
         <div className="mb-10 text-center">
           <p className="mb-3 flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#EAB308]">
-            <Sparkles className="size-4" /> Word of the Day
+            <Sparkles className="size-4" /> Flashcard Practice
           </p>
           <h1 className="font-serif text-4xl leading-tight tracking-[-.04em] text-[#19352b] sm:text-5xl">
-            Daily Practice
+            Interactive Practice
           </h1>
-          <p className="mt-4 text-[#19352b]/70">Flip the cards to learn new Yorùbá words and phrases.</p>
+          <p className="mt-4 text-[#19352b]/70">Flip the cards to test your Yorùbá vocabulary and pronunciation.</p>
         </div>
 
         {/* Categories */}
@@ -206,9 +238,11 @@ export default function PracticePage() {
           ))}
         </div>
 
-        {/* Progress Bar */}
-        <div className="mb-8 flex items-center gap-4">
-          <div className="text-sm font-semibold text-[#19352b] w-12">{currentIndex + 1} / {filteredCards.length}</div>
+        {/* Progress Bar & Actions */}
+        <div className="mb-8 flex items-center justify-between gap-4">
+          <div className="text-sm font-semibold text-[#19352b] w-16">
+            {currentIndex + 1} / {displayedCards.length}
+          </div>
           <div className="h-2 flex-1 overflow-hidden rounded-full bg-[#19352b]/10">
             <motion.div
               className="h-full bg-[#EAB308]"
@@ -217,6 +251,18 @@ export default function PracticePage() {
               transition={{ duration: 0.3 }}
             />
           </div>
+          <button
+            onClick={handleToggleShuffle}
+            className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all ${
+              isShuffled
+                ? 'bg-[#EAB308] text-[#19352b] shadow-sm'
+                : 'border border-[#19352b]/15 bg-white text-[#19352b]/80 hover:bg-[#19352b]/5'
+            }`}
+            title="Toggle shuffle order"
+          >
+            <Shuffle className="size-3.5" />
+            <span>{isShuffled ? 'Shuffled' : 'Shuffle'}</span>
+          </button>
         </div>
 
         {/* Flashcard Area */}
@@ -233,11 +279,26 @@ export default function PracticePage() {
               className="absolute inset-0"
             >
               <motion.div
-                className="relative h-full w-full cursor-pointer"
+                className="relative h-full w-full cursor-pointer focus:outline-none focus-visible:ring-4 focus-visible:ring-[#EAB308]/50 rounded-3xl"
                 style={{ transformStyle: 'preserve-3d' }}
                 animate={{ rotateY: isFlipped ? 180 : 0 }}
                 transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
                 onClick={toggleFlip}
+                tabIndex={0}
+                role="button"
+                aria-label={`Flashcard: ${card.yoruba}. Press Space or Enter to flip, or use arrow keys.`}
+                onKeyDown={(e) => {
+                  if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault()
+                    toggleFlip()
+                  } else if (e.key === 'ArrowRight') {
+                    e.preventDefault()
+                    handleNext()
+                  } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault()
+                    handlePrev()
+                  }
+                }}
               >
                 {/* Front of Card (Yorùbá) */}
                 <div
@@ -248,8 +309,17 @@ export default function PracticePage() {
                     {card.category}
                   </span>
 
+                  <button
+                    onClick={(e) => speakWord(card.yoruba, e)}
+                    className="absolute top-6 right-6 flex size-9 items-center justify-center rounded-full bg-[#19352b]/5 text-[#19352b] transition-all hover:bg-[#EAB308] hover:text-[#19352b]"
+                    aria-label="Listen to pronunciation"
+                    title="Listen to pronunciation"
+                  >
+                    <Volume2 className={`size-4.5 ${isSpeaking ? 'animate-pulse text-[#EAB308]' : ''}`} />
+                  </button>
+
                   <h2 className="font-serif text-5xl sm:text-6xl text-[#19352b] text-center">{card.yoruba}</h2>
-                  <p className="mt-8 text-sm font-medium text-[#19352b]/50 tracking-widest uppercase">Click to reveal meaning</p>
+                  <p className="mt-8 text-sm font-medium text-[#19352b]/50 tracking-widest uppercase">Click or press Space to reveal</p>
                 </div>
 
                 {/* Back of Card (English) */}
@@ -263,12 +333,17 @@ export default function PracticePage() {
 
                   <h2 className="font-serif text-4xl sm:text-5xl text-center mb-6">{card.english}</h2>
 
-                  <div className="flex items-center gap-3 rounded-xl bg-white/10 px-5 py-3">
-                    <Volume2 className="size-5 text-[#EAB308]" />
-                    <span className="font-medium text-white/80">{card.phonetic}</span>
-                  </div>
+                  <button
+                    onClick={(e) => speakWord(card.yoruba, e)}
+                    className="flex items-center gap-3 rounded-xl bg-white/10 px-5 py-3 transition-colors hover:bg-white/20 text-left"
+                    aria-label="Listen to pronunciation"
+                    title="Click to hear pronunciation"
+                  >
+                    <Volume2 className={`size-5 text-[#EAB308] ${isSpeaking ? 'animate-pulse' : ''}`} />
+                    <span className="font-medium text-white/90">{card.phonetic}</span>
+                  </button>
 
-                  <p className="mt-8 text-sm font-medium text-white/40 tracking-widest uppercase">Click to flip back</p>
+                  <p className="mt-8 text-sm font-medium text-white/40 tracking-widest uppercase">Click or press Space to flip back</p>
                 </div>
               </motion.div>
             </motion.div>
@@ -295,12 +370,19 @@ export default function PracticePage() {
 
           <button
             onClick={handleNext}
-            disabled={currentIndex === filteredCards.length - 1}
+            disabled={currentIndex === displayedCards.length - 1}
             className="flex size-14 items-center justify-center rounded-full bg-[#19352b] text-white transition-all hover:-translate-y-1 hover:shadow-lg disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none"
             aria-label="Next card"
           >
             <ChevronRight className="size-6" />
           </button>
+        </div>
+
+        {/* Extended Interactive Learning Studio */}
+        <div className="mt-24 space-y-16 border-t border-[#19352b]/10 pt-16">
+          <TonePlayground />
+          <TalkingDrum />
+          <FluencyQuiz />
         </div>
 
       </div>

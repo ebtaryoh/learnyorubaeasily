@@ -19,7 +19,7 @@ export default function FaqPage() {
   const [openFaq, setOpenFaq] = useState(0)
 
   return (
-    <div className="min-h-screen bg-[#f0e9dd]">
+    <div className="min-h-screen bg-[#f8f6f0]">
       <section className="px-5 py-24 pt-32 lg:px-8 lg:pt-40">
         <motion.div className="mx-auto max-w-[1000px]" initial="hidden" animate="visible" variants={staggerContainer}>
           <motion.p variants={fadeUpVariants} className="mb-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#EAB308]"><span className="h-px w-10 bg-[#EAB308]" /> FAQ</motion.p>

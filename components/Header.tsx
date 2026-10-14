@@ -2,9 +2,10 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { usePathname } from 'next/navigation'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -19,11 +20,29 @@ export function Header() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Close mobile menu on Escape key
+  const handleEscape = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape' && mobileOpen) {
+      setMobileOpen(false)
+    }
+  }, [mobileOpen])
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [handleEscape])
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileOpen(false)
+  }, [pathname])
+
   const navItems = [
     { name: 'Classes', href: '/classes' },
     { name: 'Practice', href: '/practice' },
     { name: 'About', href: '/about' },
     { name: 'FAQ', href: '/faq' },
+    { name: 'Contact', href: '/contact' },
   ]
 
   if (pathname === '/register') return null
@@ -55,23 +74,32 @@ export function Header() {
         </button>
       </div>
       
-      {mobileOpen && (
-        <nav className="flex flex-col gap-5 border-t border-[#19352b]/10 bg-[#f8f6f0] px-5 py-6 lg:hidden">
-          {navItems.map((item) => (
-            <Link 
-              key={item.name} 
-              href={item.href} 
-              onClick={() => setMobileOpen(false)} 
-              className={`text-lg ${pathname === item.href ? 'text-[#EAB308] font-medium' : ''}`}
-            >
-              {item.name}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.nav 
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="flex flex-col gap-5 overflow-hidden border-t border-[#19352b]/10 bg-[#f8f6f0] px-5 py-6 lg:hidden"
+          >
+            {navItems.map((item) => (
+              <Link 
+                key={item.name} 
+                href={item.href} 
+                onClick={() => setMobileOpen(false)} 
+                className={`text-lg ${pathname === item.href ? 'text-[#EAB308] font-medium' : ''}`}
+              >
+                {item.name}
+              </Link>
+            ))}
+            <Link href="/register" onClick={() => setMobileOpen(false)} className="rounded-full bg-[#19352b] px-5 py-3 text-center text-[#f8f6f0]">
+              Register now
             </Link>
-          ))}
-          <Link href="/register" onClick={() => setMobileOpen(false)} className="rounded-full bg-[#19352b] px-5 py-3 text-center text-[#f8f6f0]">
-            Register now
-          </Link>
-        </nav>
-      )}
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </header>
   )
 }
+

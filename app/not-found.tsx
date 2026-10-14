@@ -10,7 +10,7 @@ export default function NotFound() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
         className="flex max-w-md flex-col items-center"
       >
         <div className="mb-8 flex size-24 items-center justify-center rounded-full bg-[#e6eee5]">

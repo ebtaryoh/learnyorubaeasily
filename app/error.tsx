@@ -21,7 +21,7 @@ export default function ErrorBoundary({
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] as const }}
         className="flex max-w-md flex-col items-center"
       >
         <div className="mb-8 flex size-24 items-center justify-center rounded-full bg-[#f2e5d8]">
