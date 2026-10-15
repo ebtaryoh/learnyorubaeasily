@@ -19,6 +19,8 @@ export function Footer() {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
           <div className="flex gap-6 text-sm text-[#19352b]/60">
             <Link href="/classes">Classes</Link>
+            <Link href="/practice">Practice</Link>
+            <Link href="/shop">Store</Link>
             <Link href="/about">About</Link>
             <Link href="/faq">FAQ</Link>
             <Link href="/contact">Contact</Link>

@@ -4,7 +4,7 @@ import { useState, useEffect, FormEvent } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { EASING, DURATION } from '@/lib/animations'
-import { ArrowLeft, Check, ChevronRight, User, Users, Baby, HelpCircle, Loader2, Edit3, MessageCircle } from 'lucide-react'
+import { ArrowLeft, Check, ChevronRight, User, Users, Baby, HelpCircle, Loader2, Edit3, MessageCircle, ArrowRight, Sparkles } from 'lucide-react'
 
 // --- TYPES & INITIAL STATE ---
 type RegistrationType = 'Myself' | 'My child' | 'My family' | 'Someone else' | ''
@@ -895,8 +895,34 @@ export default function RegisterPage() {
                   </ul>
                 </div>
               </div>
+
+              {/* Cultural Store Spotlight Card */}
+              <div className="mt-8 w-full max-w-[500px] rounded-3xl bg-gradient-to-br from-[#19352b] to-[#23483b] p-6 sm:p-7 text-left text-white shadow-lg border border-[#EAB308]/20 relative overflow-hidden">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="space-y-1.5">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EAB308]/20 px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#EAB308]">
+                      <Sparkles className="size-3" /> Student & Heritage Store
+                    </span>
+                    <h3 className="font-serif text-xl font-bold text-white">
+                      Equip Your Study Space
+                    </h3>
+                    <p className="text-xs text-white/75 leading-relaxed">
+                      Alphabet wall art posters, kids flashcard decks, and signature “Ọmọ Yorùbá Ni Mí” tees. Dispatched locally across US, UK, Canada & EU.
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
+                  <span className="text-[11px] text-[#EAB308] font-medium">Global shipping • Instant digital kits</span>
+                  <Link
+                    href="/shop"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-[#EAB308] px-4 py-2 text-xs font-bold text-[#19352b] transition-transform hover:-translate-y-0.5 shadow-sm"
+                  >
+                    Browse Store <ArrowRight className="size-3.5" />
+                  </Link>
+                </div>
+              </div>
               
-              <div className="mt-12 flex flex-col gap-4 sm:flex-row w-full sm:w-auto justify-center">
+              <div className="mt-10 flex flex-col gap-4 sm:flex-row w-full sm:w-auto justify-center">
                 <a href="https://chat.whatsapp.com/BaZKdym3lFzC4Genqg43Rh" target="_blank" className="inline-flex items-center justify-center rounded-full bg-[#25D366] px-8 py-4 font-semibold text-white transition-transform hover:-translate-y-1 shadow-md hover:shadow-lg">
                   <MessageCircle className="mr-2 size-5" /> Join WhatsApp Group
                 </a>
@@ -959,7 +985,7 @@ export default function RegisterPage() {
                 <p className="font-semibold text-[#19352b]">Questions before registering?</p>
                 <p className="text-[#19352b]/70">We&apos;re happy to assist with cohort times, tutor placement, or family plans.</p>
                 <a
-                  href="https://wa.me/+2348185051113?text=Hello!%20I%20have%20a%20question%20about%20registering%20for%20LearnYorubaEasily%20classes"
+                  href="https://wa.me/2348185051113?text=Hello!%20I%20have%20a%20question%20about%20registering%20for%20LearnYorubaEasily%20classes"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 font-semibold text-[#19352b] hover:text-[#EAB308] pt-1"

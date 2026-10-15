@@ -3,9 +3,8 @@
 import { motion } from 'framer-motion'
 
 export function WhatsAppButton() {
-  // Replace this with the actual WhatsApp number including country code, e.g., '1234567890'
-  const whatsappNumber = '+2348185051113'
-  const message = 'Hello! I would like to learn more about Your classes @LearnYorubaEasily'
+  const whatsappNumber = '2348185051113'
+  const message = 'Hello! I would like to learn more about classes @LearnYorubaEasily'
   const href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`
 
   return (
