@@ -86,6 +86,75 @@ const goalsList = [
 
 const daysList = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
+interface TimezoneOption {
+  value: string;
+  label: string;
+  ianaMatches: string[];
+}
+
+const timezoneOptions: TimezoneOption[] = [
+  {
+    value: 'WAT (West Africa Time - Nigeria, GMT+1)',
+    label: 'WAT — West Africa Time (Nigeria, West Africa • GMT+1)',
+    ianaMatches: ['Africa/Lagos', 'Africa/Porto-Novo', 'Africa/Niamey', 'Africa/Douala', 'Africa/Luanda']
+  },
+  {
+    value: 'BST / GMT (UK & Ireland - London, Dublin)',
+    label: 'BST / GMT — United Kingdom & Ireland (London, Dublin • GMT+1/0)',
+    ianaMatches: ['Europe/London', 'Europe/Dublin', 'Europe/Belfast']
+  },
+  {
+    value: 'EST / EDT (US & Canada Eastern - New York, Toronto, Atlanta)',
+    label: 'EST / EDT — US & Canada Eastern (New York, Toronto, Atlanta • GMT-4/-5)',
+    ianaMatches: ['America/New_York', 'America/Toronto', 'America/Detroit', 'America/Montreal', 'America/Kentucky', 'America/Indiana']
+  },
+  {
+    value: 'CST / CDT (US & Canada Central - Chicago, Dallas, Houston)',
+    label: 'CST / CDT — US & Canada Central (Chicago, Dallas, Houston • GMT-5/-6)',
+    ianaMatches: ['America/Chicago', 'America/Winnipeg', 'America/Menominee']
+  },
+  {
+    value: 'PST / PDT (US & Canada Pacific - Los Angeles, Vancouver)',
+    label: 'PST / PDT — US & Canada Pacific (Los Angeles, San Francisco, Vancouver • GMT-7/-8)',
+    ianaMatches: ['America/Los_Angeles', 'America/Vancouver']
+  },
+  {
+    value: 'MST / MDT (US & Canada Mountain - Denver, Calgary, Phoenix)',
+    label: 'MST / MDT — US & Canada Mountain (Denver, Calgary, Phoenix • GMT-6/-7)',
+    ianaMatches: ['America/Denver', 'America/Edmonton', 'America/Phoenix']
+  },
+  {
+    value: 'CET / CEST (Central Europe - Germany, France, Italy, Spain)',
+    label: 'CET / CEST — Central Europe (Berlin, Paris, Amsterdam, Rome • GMT+1/+2)',
+    ianaMatches: ['Europe/Berlin', 'Europe/Paris', 'Europe/Amsterdam', 'Europe/Rome', 'Europe/Madrid', 'Europe/Brussels']
+  },
+  {
+    value: 'SAST (South Africa Standard Time - Johannesburg, GMT+2)',
+    label: 'SAST — South Africa (Johannesburg, Cape Town • GMT+2)',
+    ianaMatches: ['Africa/Johannesburg']
+  },
+  {
+    value: 'EAT (East Africa Time - Nairobi, Addis Ababa, GMT+3)',
+    label: 'EAT — East Africa Time (Nairobi, Kampala, Addis Ababa • GMT+3)',
+    ianaMatches: ['Africa/Nairobi', 'Africa/Kampala', 'Africa/Addis_Ababa']
+  },
+  {
+    value: 'GMT / UTC (West Africa - Ghana, Senegal, GMT+0)',
+    label: 'GMT / UTC — West Africa (Accra, Dakar, Freetown • GMT+0)',
+    ianaMatches: ['Africa/Accra', 'Africa/Dakar', 'Africa/Freetown', 'UTC']
+  },
+  {
+    value: 'AEST / AEDT (Australia Eastern - Sydney, Melbourne)',
+    label: 'AEST / AEDT — Australia Eastern (Sydney, Melbourne, Brisbane • GMT+10/+11)',
+    ianaMatches: ['Australia/Sydney', 'Australia/Melbourne', 'Australia/Brisbane']
+  },
+  {
+    value: 'AWST (Australia Western - Perth, GMT+8)',
+    label: 'AWST — Australia Western (Perth • GMT+8)',
+    ianaMatches: ['Australia/Perth']
+  },
+]
+
 export default function RegisterPage() {
   const [mounted, setMounted] = useState(false)
   const [step, setStep] = useState<Step>('about')
@@ -108,11 +177,18 @@ export default function RegisterPage() {
       }
     }
     
-    // Auto-detect timezone
+    // Auto-detect timezone and match to friendly abbreviation (e.g. WAT, BST, EST)
     if (!data.timezone) {
       try {
-        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
-        setData(prev => ({ ...prev, timezone: tz }))
+        const detectedIana = Intl.DateTimeFormat().resolvedOptions().timeZone
+        const matched = timezoneOptions.find(opt =>
+          opt.ianaMatches.some(iana => detectedIana.toLowerCase() === iana.toLowerCase() || detectedIana.toLowerCase().includes(iana.toLowerCase()))
+        )
+        if (matched) {
+          setData(prev => ({ ...prev, timezone: matched.value }))
+        } else if (detectedIana) {
+          setData(prev => ({ ...prev, timezone: detectedIana }))
+        }
       } catch (e) {}
     }
   }, [])
@@ -168,11 +244,31 @@ export default function RegisterPage() {
   }
 
   const handleNext = (currentStep: Step) => {
-    if (currentStep === 'intro') setStep('about')
-    else if (currentStep === 'about' && validateAbout()) setStep('learning')
-    else if (currentStep === 'learning' && validateLearning()) setStep('goals')
-    else if (currentStep === 'goals' && validateGoals()) setStep('review')
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    if (currentStep === 'intro') {
+      setStep('about')
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else if (currentStep === 'about') {
+      if (validateAbout()) {
+        setStep('learning')
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else {
+        window.scrollTo({ top: 180, behavior: 'smooth' })
+      }
+    } else if (currentStep === 'learning') {
+      if (validateLearning()) {
+        setStep('goals')
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else {
+        window.scrollTo({ top: 180, behavior: 'smooth' })
+      }
+    } else if (currentStep === 'goals') {
+      if (validateGoals()) {
+        setStep('review')
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else {
+        window.scrollTo({ top: 180, behavior: 'smooth' })
+      }
+    }
   }
 
   const handleSubmit = async (e: FormEvent) => {
@@ -205,8 +301,13 @@ export default function RegisterPage() {
         return
       }
 
+      // Generate the official reference number before sending so both Google Sheet and user share the same ref
+      const generatedRef = `LYE-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`
+      setRefNumber(generatedRef)
+
       // Convert our data object into a format Google Sheets likes
       const searchParams = new URLSearchParams()
+      searchParams.append('referenceNumber', generatedRef)
       Object.entries(data).forEach(([key, value]) => {
         // Flatten arrays (like programs or goals) into comma-separated strings
         if (Array.isArray(value)) {
@@ -231,7 +332,6 @@ export default function RegisterPage() {
 
       // Since no-cors hides the response, we assume success if it didn't throw a network error
       setIsSubmitting(false)
-      setRefNumber(`LYE-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`)
       setStep('success')
       localStorage.removeItem(STORAGE_KEY)
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -336,6 +436,7 @@ export default function RegisterPage() {
                   <div className="space-y-2">
                     <label htmlFor="phone" className="text-sm font-medium">WhatsApp Number *</label>
                     <input id="phone" value={data.phone} onChange={e => handleUpdate('phone', e.target.value)} type="tel" placeholder="+1 (555) 000-0000" className={`w-full rounded-xl border bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308] ${errors.phone ? 'border-red-400' : 'border-[#19352b]/10'}`} />
+                    <p className="text-[11px] text-[#19352b]/60">Include country code (e.g. +234, +1, +44) for WhatsApp onboarding.</p>
                     {errors.phone && <p className="text-xs text-red-500">{errors.phone}</p>}
                   </div>
                 </div>
@@ -378,11 +479,15 @@ export default function RegisterPage() {
                 <AnimatePresence>
                   {data.registerType === 'My child' && (
                     <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
-                      <div className="grid gap-6 pt-4 sm:grid-cols-2">
+                      <div className="grid gap-6 pt-4 sm:grid-cols-3">
                         <div className="space-y-2">
                           <label className="text-sm font-medium">Child&apos;s First Name *</label>
                           <input value={data.childFirstName} onChange={e => handleUpdate('childFirstName', e.target.value)} type="text" className={`w-full rounded-xl border bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308] ${errors.childFirstName ? 'border-red-400' : 'border-[#19352b]/10'}`} />
                           {errors.childFirstName && <p className="text-xs text-red-500">{errors.childFirstName}</p>}
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium">Child&apos;s Last Name</label>
+                          <input value={data.childLastName} onChange={e => handleUpdate('childLastName', e.target.value)} type="text" placeholder="Optional" className="w-full rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308]" />
                         </div>
                         <div className="space-y-2">
                           <label className="text-sm font-medium">Child&apos;s Age *</label>
@@ -560,8 +665,45 @@ export default function RegisterPage() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Your Time Zone</label>
-                    <input value={data.timezone} onChange={e => handleUpdate('timezone', e.target.value)} type="text" placeholder="e.g. America/New_York or GMT+1" className="w-full rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308]" />
+                    <div className="flex items-center justify-between">
+                      <label htmlFor="timezone" className="text-sm font-medium">Your Time Zone</label>
+                      <span className="text-[11px] font-medium text-[#577565]">⚡ Auto-detected</span>
+                    </div>
+                    <select
+                      id="timezone"
+                      value={timezoneOptions.some(opt => opt.value === data.timezone) ? data.timezone : (data.timezone ? 'custom' : '')}
+                      onChange={e => {
+                        if (e.target.value === 'custom') {
+                          handleUpdate('timezone', 'Custom')
+                        } else {
+                          handleUpdate('timezone', e.target.value)
+                        }
+                      }}
+                      className="w-full appearance-none rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 outline-none transition-colors focus:border-[#EAB308]"
+                    >
+                      <option value="">Select your time zone...</option>
+                      {timezoneOptions.map(tz => (
+                        <option key={tz.value} value={tz.value}>
+                          {tz.label}
+                        </option>
+                      ))}
+                      <option value="custom">Other / Custom Time Zone...</option>
+                    </select>
+
+                    {/* Show text input if custom was selected or non-standard timezone */}
+                    {(!timezoneOptions.some(opt => opt.value === data.timezone) && data.timezone) && (
+                      <div className="pt-2">
+                        <input
+                          value={data.timezone === 'Custom' ? '' : data.timezone}
+                          onChange={e => handleUpdate('timezone', e.target.value)}
+                          placeholder="Type your timezone or city (e.g. WAT, GMT+1, or Dubai GMT+4)"
+                          className="w-full rounded-xl border border-[#19352b]/10 bg-[#f8f6f0]/50 px-4 py-3 text-sm outline-none transition-colors focus:border-[#EAB308]"
+                        />
+                      </div>
+                    )}
+                    <p className="text-xs text-[#19352b]/60">
+                      Lesson schedules and WhatsApp coordination will be arranged in this time zone.
+                    </p>
                   </div>
                 </div>
 
@@ -610,7 +752,13 @@ export default function RegisterPage() {
                     <div><span className="block text-[#19352b]/50">Country</span><span className="font-medium">{data.country || '—'}</span></div>
                     <div className="col-span-2 pt-4 border-t border-[#19352b]/10"><span className="block text-[#19352b]/50">Registration Type</span><span className="font-medium">{data.registerType}</span></div>
                     {data.registerType === 'My child' && (
-                      <div className="col-span-2"><span className="block text-[#19352b]/50">Child Info</span><span className="font-medium">{data.childFirstName} {data.childLastName}, Age {data.childAge}</span></div>
+                      <div className="col-span-2"><span className="block text-[#19352b]/50">Child Info</span><span className="font-medium">{data.childFirstName} {data.childLastName ? `${data.childLastName}, ` : ''}Age {data.childAge}</span></div>
+                    )}
+                    {data.registerType === 'My family' && data.familyDetails && (
+                      <div className="col-span-2"><span className="block text-[#19352b]/50">Family Details</span><span className="font-medium">{data.familyDetails}</span></div>
+                    )}
+                    {data.registerType === 'Someone else' && (
+                      <div className="col-span-2"><span className="block text-[#19352b]/50">Learner Info</span><span className="font-medium">{data.otherLearnerName || '—'} {data.otherRelationship ? `(${data.otherRelationship})` : ''}</span></div>
                     )}
                   </div>
                 </div>
@@ -648,15 +796,15 @@ export default function RegisterPage() {
                 <div className="rounded-3xl bg-white p-6 shadow-sm sm:p-10 border border-[#19352b]/5 space-y-4">
                   <div className="rounded-2xl bg-[#f8f6f0] p-6 border border-[#19352b]/10 space-y-3">
                     <span className="inline-block rounded-full bg-[#EAB308]/20 px-3 py-1 text-xs font-bold text-[#19352b]">
-                      One-on-One Lesson Policy & Pricing
+                      Lesson Schedule & Rates
                     </span>
                     <p className="text-sm text-[#19352b]/85 leading-relaxed">
-                      One-on-one lessons are held <strong>any day of the week, 1–2 times a week</strong> (within 1–2 hours per day).
+                      1-on-1 private lessons are held <strong>any day of the week, 1–2 times a week</strong> ($25/hr adults, $20/hr kids). Group class cohorts meet on scheduled weekly dates.
                     </p>
                     <div className="flex flex-wrap gap-3 pt-1 text-xs font-semibold">
-                      <span className="bg-white px-3.5 py-1.5 rounded-lg border border-[#19352b]/10 text-[#19352b]">Adults: $25 USD / hour</span>
-                      <span className="bg-white px-3.5 py-1.5 rounded-lg border border-[#19352b]/10 text-[#19352b]">Kids: $20 USD / hour</span>
-                      <span className="text-[#577565] self-center">Sibling & group discounts available upon request</span>
+                      <span className="bg-white px-3.5 py-1.5 rounded-lg border border-[#19352b]/10 text-[#19352b]">Adults 1-on-1: $25 USD / hour</span>
+                      <span className="bg-white px-3.5 py-1.5 rounded-lg border border-[#19352b]/10 text-[#19352b]">Kids 1-on-1: $20 USD / hour</span>
+                      <span className="text-[#577565] self-center">Sibling & group cohort rates coordinated directly</span>
                     </div>
                   </div>
 
@@ -665,7 +813,7 @@ export default function RegisterPage() {
                       {data.pricingAgreed && <Check className="size-3.5" />}
                     </div>
                     <input type="checkbox" className="sr-only" checked={data.pricingAgreed} onChange={(e) => handleUpdate('pricingAgreed', e.target.checked)} />
-                    <span className="text-sm font-medium">I understand and agree to the 1-on-1 lesson schedule and pricing terms. *</span>
+                    <span className="text-sm font-medium">I understand and agree to the lesson schedule and rate terms. *</span>
                   </label>
                   {errors.pricingAgreed && <p className="mt-1 ml-9 text-xs text-red-500">{errors.pricingAgreed}</p>}
                 </div>
@@ -695,13 +843,18 @@ export default function RegisterPage() {
                   </label>
                   {errors.termsAgreed && <p className="mt-2 ml-9 text-xs text-red-500">{errors.termsAgreed}</p>}
                   
-                  <label className="flex items-start gap-4 mt-4 cursor-pointer group">
-                    <div className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded border transition-colors ${data.marketingAgreed ? 'border-[#EAB308] bg-[#EAB308] text-white' : 'border-[#19352b]/30 group-hover:border-[#19352b]/50 bg-white'}`}>
-                      {data.marketingAgreed && <Check className="size-3.5" />}
-                    </div>
-                    <input type="checkbox" className="sr-only" checked={data.marketingAgreed} onChange={(e) => handleUpdate('marketingAgreed', e.target.checked)} />
-                    <span className="text-sm text-[#19352b]/70">I&apos;d like to receive useful Yorùbá learning updates and announcements.</span>
-                  </label>
+                  <div className="mt-4">
+                    <label className="flex items-start gap-4 cursor-pointer group">
+                      <div className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded border transition-colors ${data.marketingAgreed ? 'border-[#EAB308] bg-[#EAB308] text-white' : 'border-[#19352b]/30 group-hover:border-[#19352b]/50 bg-white'}`}>
+                        {data.marketingAgreed && <Check className="size-3.5" />}
+                      </div>
+                      <input type="checkbox" className="sr-only" checked={data.marketingAgreed} onChange={(e) => handleUpdate('marketingAgreed', e.target.checked)} />
+                      <div>
+                        <span className="text-sm text-[#19352b]/85">I&apos;d like to receive useful Yorùbá learning updates and announcements.</span>
+                        <p className="text-[11px] text-[#19352b]/55 mt-0.5">Occasional cultural tips, proverbs, and semester cohort announcements. No spam, unsubscribe anytime.</p>
+                      </div>
+                    </label>
+                  </div>
                   
                   {submitError && <div className="mt-6 p-4 rounded-xl bg-red-50 text-red-600 text-sm border border-red-100">{submitError}</div>}
 
